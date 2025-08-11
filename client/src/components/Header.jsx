@@ -52,7 +52,7 @@ const Header = () => {
           : 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-modern'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         <div className="flex justify-between items-center h-16 lg:h-20 xl:h-24">
           {/* Logo Section */}
           <div className="flex-shrink-0">
