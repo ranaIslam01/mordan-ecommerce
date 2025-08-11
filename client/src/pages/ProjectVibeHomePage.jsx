@@ -36,6 +36,8 @@ const ProjectVibeHomePage = () => {
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const [viewMode, setViewMode] = useState('asymmetric'); // asymmetric, grid, list
   const scrollControllerRef = useRef(null);
+  const vibeFilterScrollRef = useRef(null);
+  const vibeFilterContainerRef = useRef(null);
   const limit = 12;
 
   const [{ loading, error, products, pages, total }, dispatch] = useReducer(reducer, {
