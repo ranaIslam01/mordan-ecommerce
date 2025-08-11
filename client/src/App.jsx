@@ -45,7 +45,7 @@ function App() {
           <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
             <Header />
             <Breadcrumb />
-            <main className="flex-grow">
+            <main className="flex-grow pt-24 lg:pt-28 xl:pt-32">
               <Routes>
                 <Route path="/" element={<ProjectVibeHomePage />} />
                 <Route path="/classic" element={<HomePage />} />
