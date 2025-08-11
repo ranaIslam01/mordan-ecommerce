@@ -865,63 +865,96 @@ body {
 /* Mobile specific optimizations - 2 Line Layout */
 @media (max-width: 640px) {
   .vibe-filter-scroll {
-    overflow-x: visible;
-    overflow-y: visible;
+    overflow: visible;
   }
 
   .vibe-filter-wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
     min-width: 100%;
-    padding-bottom: 8px;
+    padding-bottom: 12px;
   }
 
   .vibe-filter-card {
     min-width: unset;
     width: 100%;
-    padding: 10px;
-    font-size: 12px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 80px;
+  }
+
+  .vibe-filter-card .flex {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
   }
 
   .vibe-icon-wrapper {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
   }
 
   .vibe-filter-label {
-    font-size: 9px;
+    font-size: 10px;
     line-height: 1.2;
+    text-align: center;
   }
 
   .vibe-filter-value {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.3;
+    text-align: center;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 100%;
+  }
+
+  /* Price Range Card - Full width on bottom */
+  .vibe-filter-card:has(.vibe-price-input) {
+    grid-column: 1 / -1;
+    min-height: auto;
+  }
+
+  .vibe-filter-card:has(.vibe-price-input) .flex {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .vibe-price-input {
-    width: 14px;
-    font-size: 9px;
-    padding: 3px 4px;
-  }
-
-  /* Price Range Card gets special treatment to span 2 columns */
-  .vibe-filter-card:nth-child(7) {
-    grid-column: 1 / -1;
-    min-width: unset;
-  }
-
-  /* View Mode Card gets special spacing */
-  .vibe-filter-card:nth-child(8) .vibe-filter-wrapper,
-  .vibe-filter-card:nth-child(8) .flex {
-    gap: 1px;
-  }
-
-  .vibe-filter-card:nth-child(8) button {
+    width: 50px;
+    font-size: 11px;
     padding: 4px 6px;
-    font-size: 10px;
+  }
+
+  /* View Mode Card - Compact buttons */
+  .vibe-filter-card:has([title="Asymmetric"]) .flex {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .vibe-filter-card:has([title="Asymmetric"]) .flex > div:last-child .flex {
+    flex-direction: row;
+    gap: 2px;
+  }
+
+  .vibe-filter-card:has([title="Asymmetric"]) button {
+    padding: 6px 8px;
+    font-size: 14px;
+    min-width: 36px;
+  }
+
+  /* Clear All and Advanced Filters - Full width on separate row */
+  .vibe-filter-card:has([class*="red-"]),
+  .vibe-filter-card:has(svg[stroke="currentColor"]) {
+    grid-column: 1 / -1;
+    min-height: auto;
   }
 }
 
