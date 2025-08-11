@@ -931,36 +931,4 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Scroll fade indicators */
-.vibe-filter-container::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 20px;
-  width: 20px;
-  background: linear-gradient(to right, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 10;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.vibe-filter-container::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 20px;
-  width: 20px;
-  background: linear-gradient(to left, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 10;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.vibe-filter-container.has-scroll::before,
-.vibe-filter-container.has-scroll::after {
-  opacity: 1;
-}
+/* Scroll fade indicators - Removed light effects */
