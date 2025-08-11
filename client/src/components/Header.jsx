@@ -81,7 +81,7 @@ const Header = () => {
           </div>
 
           {/* Desktop SearchBox - Made Larger */}
-          <div className="hidden md:flex flex-1 max-w-lg lg:max-w-2xl xl:max-w-3xl mx-4 lg:mx-8 xl:mx-12">
+          <div className="hidden md:flex flex-1 max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-4 lg:mx-8 xl:mx-12">
             <div className="w-full relative">
               <SearchBox />
             </div>
