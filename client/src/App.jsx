@@ -1,24 +1,24 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { WishlistProvider } from './context/WishlistContext';
-import { DarkModeProvider } from './context/DarkModeContext';
+import { WishlistProvider } from './context/WishlistContext.jsx';
+import { DarkModeProvider } from './context/DarkModeContext.jsx';
 import PerformanceOptimizer from './utils/PerformanceOptimizer';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import ProjectVibeHomePage from './pages/ProjectVibeHomePage';
-import HomePage from './pages/HomePage';
-import ProductPage from './pages/ProductPage';
-import CartPage from './pages/CartPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import ProfilePage from './pages/ProfilePage';
-import WishlistPage from './pages/WishlistPage';
-import ProtectedRoute from './components/ProtectedRoute';
-import ShippingAddressPage from './pages/ShippingAddressPage';
-import PaymentMethodPage from './pages/PaymentMethodPage';
-import PlaceOrderPage from './pages/PlaceOrderPage';
-import OrderPage from './pages/OrderPage';
-import MyOrdersPage from './pages/MyOrdersPage';
+import Header from './components/Header.jsx';
+import Footer from './components/Footer.jsx';
+import ProjectVibeHomePage from './pages/ProjectVibeHomePage.jsx';
+import HomePage from './pages/HomePage.jsx';
+import ProductPage from './pages/ProductPage.jsx';
+import CartPage from './pages/CartPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
+import WishlistPage from './pages/WishlistPage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ShippingAddressPage from './pages/ShippingAddressPage.jsx';
+import PaymentMethodPage from './pages/PaymentMethodPage.jsx';
+import PlaceOrderPage from './pages/PlaceOrderPage.jsx';
+import OrderPage from './pages/OrderPage.jsx';
+import MyOrdersPage from './pages/MyOrdersPage.jsx';
 
 function App() {
   // Initialize Performance Optimization for Core Web Vitals
