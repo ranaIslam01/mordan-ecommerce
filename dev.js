@@ -12,7 +12,7 @@ console.log('🚀 Starting server...');
 const server = spawn('npm', ['run', 'dev'], {
   cwd: join(__dirname, 'server'),
   stdio: 'pipe',
-  env: { ...process.env, PORT: '8001' }
+  env: { ...process.env, PORT: '8002' }
 });
 
 // Start client
