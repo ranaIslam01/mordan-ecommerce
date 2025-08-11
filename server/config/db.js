@@ -18,7 +18,7 @@ const connectDB = async () => {
   } catch (error) {
     console.error(`❌ MongoDB Connection Error: ${error.message}`);
     console.log(`⚠️ Running in demo mode with mock data.`);
-    process.exit(1);
+    // Continue running in demo mode instead of exiting
   }
 };
 

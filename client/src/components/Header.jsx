@@ -80,22 +80,8 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-2 xl:space-x-4">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="relative px-4 xl:px-6 py-2 xl:py-3 text-gray-700 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-300 font-semibold text-sm xl:text-base transition-all duration-300 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/30 group"
-              >
-                {item.name}
-                <span className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 group-hover:w-6 transition-all duration-300 rounded-full"></span>
-              </Link>
-            ))}
-          </nav>
-
-          {/* Desktop SearchBox */}
-          <div className="hidden md:flex flex-1 max-w-md lg:max-w-lg xl:max-w-xl mx-4 lg:mx-6 xl:mx-8">
+          {/* Desktop SearchBox - Made Larger */}
+          <div className="hidden md:flex flex-1 max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-4 lg:mx-8 xl:mx-12">
             <div className="w-full relative">
               <SearchBox />
             </div>

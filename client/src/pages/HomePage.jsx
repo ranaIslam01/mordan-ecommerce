@@ -188,19 +188,19 @@ const HomePage = () => {
         </div>
 
         {/* Filters and Sort */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-8 animate-slide-up">
+        <div className="flex flex-col gap-4 mb-8 animate-slide-up">
           {/* Price Filter */}
-          <div className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-modern">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white rounded-2xl shadow-modern">
             <span className="text-body-md font-semibold text-gray-700 whitespace-nowrap">
               Price Range:
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <input
                 type="number"
                 placeholder="Min"
                 value={priceRange.min}
                 onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-                className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-20 sm:w-24 px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <span className="text-gray-500">-</span>
               <input
@@ -208,7 +208,7 @@ const HomePage = () => {
                 placeholder="Max"
                 value={priceRange.max}
                 onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-                className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-20 sm:w-24 px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <Button variant="primary" size="sm" onClick={handlePriceFilter}>
                 Apply
@@ -217,45 +217,49 @@ const HomePage = () => {
           </div>
 
           {/* Sort Options */}
-          <div className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-modern">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white rounded-2xl shadow-modern">
             <span className="text-body-md font-semibold text-gray-700 whitespace-nowrap">
               Sort by:
             </span>
-            <select
-              value={sortBy}
-              onChange={(e) => handleSortChange(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
-            >
-              {sortOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.name}
-                </option>
-              ))}
-            </select>
+            <div className="flex flex-col sm:flex-row gap-3 flex-1">
+              <select
+                value={sortBy}
+                onChange={(e) => handleSortChange(e.target.value)}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+              >
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowAdvancedFilter(true)}
+                  className="whitespace-nowrap flex-shrink-0"
+                >
+                  <svg className="w-4 h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                  </svg>
+                  <span className="hidden sm:inline">Advanced Filters</span>
+                </Button>
+
+                {/* Clear Filters */}
+                {hasFilters && (
+                  <Button variant="ghost" size="sm" onClick={clearFilters} className="flex-shrink-0">
+                    <span className="hidden sm:inline">Clear All</span>
+                    <svg className="w-4 h-4 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
-
-          {/* Advanced Filters Button */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowAdvancedFilter(true)}
-            className="whitespace-nowrap"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-            </svg>
-            Advanced Filters
-          </Button>
-
-          {/* Clear Filters */}
-          {hasFilters && (
-            <Button variant="ghost" size="sm" onClick={clearFilters}>
-              Clear All Filters
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </Button>
-          )}
         </div>
 
         {/* Products Grid */}

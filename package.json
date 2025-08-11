@@ -1,0 +1,13 @@
+{
+  "name": "rana-shop",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev.js",
+    "install": "cd client && npm install && cd ../server && npm install",
+    "build": "cd client && npm run build",
+    "start:server": "cd server && npm start",
+    "start:client": "cd client && npm start"
+  },
+  "description": "RANA-Shop E-commerce Application"
+}

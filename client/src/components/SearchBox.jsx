@@ -97,38 +97,38 @@ const SearchBox = ({ onSearch, className = '' }) => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={handleInputFocus}
-            placeholder="Search for products..."
-            className="w-full pl-12 pr-16 py-3 rounded-2xl border-0 bg-white shadow-modern text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:shadow-modern-lg transition-all duration-300"
+            placeholder="Search for products, categories, brands..."
+            className="w-full pl-14 pr-20 py-2.5 lg:py-3 text-base lg:text-lg rounded-2xl border-0 bg-white shadow-modern text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:shadow-modern-lg transition-all duration-300 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
           />
           
           {/* Search Icon */}
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="absolute left-5 top-1/2 transform -translate-y-1/2">
+            <svg className="w-6 h-6 lg:w-7 lg:h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
 
           {/* Loading/Clear Button */}
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+          <div className="absolute right-5 top-1/2 transform -translate-y-1/2 flex items-center gap-3">
             {loading && (
-              <div className="w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
             )}
             {query && !loading && (
               <button
                 type="button"
                 onClick={clearSearch}
-                className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             )}
             <button
               type="submit"
-              className="p-2 bg-gradient-primary text-white rounded-xl hover:shadow-modern transition-all duration-300 hover:-translate-y-0.5"
+              className="p-2.5 lg:p-3 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
