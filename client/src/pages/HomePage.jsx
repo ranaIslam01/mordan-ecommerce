@@ -188,19 +188,19 @@ const HomePage = () => {
         </div>
 
         {/* Filters and Sort */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-8 animate-slide-up">
+        <div className="flex flex-col gap-4 mb-8 animate-slide-up">
           {/* Price Filter */}
-          <div className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-modern">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white rounded-2xl shadow-modern">
             <span className="text-body-md font-semibold text-gray-700 whitespace-nowrap">
               Price Range:
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <input
                 type="number"
                 placeholder="Min"
                 value={priceRange.min}
                 onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-                className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-20 sm:w-24 px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <span className="text-gray-500">-</span>
               <input
@@ -208,7 +208,7 @@ const HomePage = () => {
                 placeholder="Max"
                 value={priceRange.max}
                 onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-                className="w-24 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-20 sm:w-24 px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <Button variant="primary" size="sm" onClick={handlePriceFilter}>
                 Apply
@@ -217,7 +217,7 @@ const HomePage = () => {
           </div>
 
           {/* Sort Options */}
-          <div className="flex items-center gap-4 p-4 bg-white rounded-2xl shadow-modern">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white rounded-2xl shadow-modern">
             <span className="text-body-md font-semibold text-gray-700 whitespace-nowrap">
               Sort by:
             </span>
