@@ -12,7 +12,7 @@ console.log('🚀 Starting server...');
 const server = spawn('npm', ['run', 'dev'], {
   cwd: join(__dirname, 'server'),
   stdio: 'pipe',
-  env: { ...process.env, PORT: '8002' }
+  env: { ...process.env, PORT: '8003' }
 });
 
 // Start client
@@ -49,4 +49,4 @@ process.on('SIGINT', () => {
   process.exit();
 });
 
-console.log('✅ Both services started! Client should be available on port 3000, Server on port 8001');
+console.log('✅ Both services started! Client should be available on port 3000, Server on port 8003');
