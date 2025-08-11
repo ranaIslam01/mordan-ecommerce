@@ -781,3 +781,211 @@ body {
 .filter-container.has-scroll::after {
   opacity: 1;
 }
+
+/* Vibe Filter Horizontal Responsive Styles */
+.vibe-filter-container {
+  position: relative;
+  width: 100%;
+}
+
+.vibe-filter-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+}
+
+.vibe-filter-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.vibe-filter-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.vibe-filter-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--primary-400) 0%, var(--secondary-400) 50%, var(--accent-400) 100%);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.vibe-filter-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, var(--primary-500) 0%, var(--secondary-500) 50%, var(--accent-500) 100%);
+}
+
+.vibe-filter-wrapper {
+  min-width: max-content;
+  padding-bottom: 12px;
+}
+
+.vibe-filter-card {
+  min-width: 160px;
+  width: auto;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.vibe-filter-card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.vibe-icon-wrapper {
+  transition: all 0.3s ease;
+  background: rgba(99, 102, 241, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.vibe-filter-label {
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.vibe-filter-value {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.vibe-price-input {
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.vibe-price-input:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.vibe-active-indicator {
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  from {
+    opacity: 0.6;
+    transform: scaleX(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* Mobile specific optimizations */
+@media (max-width: 640px) {
+  .vibe-filter-card {
+    min-width: 140px;
+    padding: 12px;
+  }
+
+  .vibe-icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .vibe-filter-label {
+    font-size: 10px;
+  }
+
+  .vibe-filter-value {
+    font-size: 12px;
+  }
+
+  .vibe-price-input {
+    width: 12px;
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+
+  .vibe-filter-wrapper {
+    gap: 12px;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .vibe-filter-card {
+    min-width: 180px;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  .vibe-filter-card {
+    min-width: 200px;
+  }
+
+  .vibe-filter-wrapper {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* Hide scrollbar on desktop when not needed */
+  .vibe-filter-scroll {
+    overflow-x: auto;
+  }
+}
+
+/* Advanced hover effects */
+.vibe-filter-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.vibe-filter-card:hover::before {
+  left: 100%;
+}
+
+/* Glass morphism enhancements */
+.vibe-filter-card.glass-effect {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .vibe-filter-card.glass-effect {
+  background: rgba(31, 31, 35, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scroll fade indicators */
+.vibe-filter-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 20px;
+  width: 20px;
+  background: linear-gradient(to right, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vibe-filter-container::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 20px;
+  width: 20px;
+  background: linear-gradient(to left, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vibe-filter-container.has-scroll::before,
+.vibe-filter-container.has-scroll::after {
+  opacity: 1;
+}
