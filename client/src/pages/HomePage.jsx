@@ -33,6 +33,8 @@ const HomePage = () => {
     max: searchParams.get('maxPrice') || ''
   });
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+  const filterScrollRef = useRef(null);
+  const filterContainerRef = useRef(null);
   const limit = 12;
 
   const [{ loading, error, products, pages, total }, dispatch] = useReducer(reducer, {
