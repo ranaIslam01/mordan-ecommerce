@@ -5,7 +5,6 @@ import { useWishlist } from '../context/WishlistContext';
 import SearchBox from './SearchBox.jsx';
 import Button from './Button.jsx';
 import DarkModeToggle from './DarkModeToggle.jsx';
-import AnnouncementBar from './AnnouncementBar.jsx';
 
 const Header = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
