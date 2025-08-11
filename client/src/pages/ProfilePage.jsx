@@ -62,15 +62,15 @@ export default function ProfilePage() {
     const fetchOrders = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL || ""}/api/orders/myorders`,
-          {
-            headers: {
-              Authorization: `Bearer ${userInfo.token}`,
-            },
-            withCredentials: true,
-          }
-        );
+        const baseUrl = (
+          process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+        ).replace(/\/?$/, "");
+        const { data } = await axios.get(`${baseUrl}/api/orders/myorders`, {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          withCredentials: true,
+        });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
@@ -97,10 +97,26 @@ export default function ProfilePage() {
 
     setUpdateLoading(true);
     try {
+      let formData;
+      let headers = { withCredentials: true };
+      if (avatar) {
+        formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        if (password) formData.append("password", password);
+        formData.append("avatar", avatar);
+        headers = {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        };
+      }
+      const baseUrl = (
+        process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+      ).replace(/\/?$/, "");
       const { data } = await axios.put(
-        `${process.env.REACT_APP_API_URL || ""}/api/users/profile`,
-        { name, email, password },
-        { withCredentials: true }
+        `${baseUrl}/api/users/profile`,
+        avatar ? formData : { name, email, password },
+        headers
       );
       ctxDispatch({ type: "USER_LOGIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
@@ -123,8 +139,11 @@ export default function ProfilePage() {
     }
 
     try {
+      const baseUrl = (
+        process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+      ).replace(/\/?$/, "");
       await axios.put(
-        `${process.env.REACT_APP_API_URL || ""}/api/users/password`,
+        `${baseUrl}/api/users/password`,
         { currentPassword, newPassword },
         { withCredentials: true }
       );
@@ -205,33 +224,42 @@ export default function ProfilePage() {
                       userInfo.name?.charAt(0) || "U"
                     )}
                   </div>
-                  <button
-                    onClick={() =>
-                      document.getElementById("avatar-upload").click()
-                    }
-                    className="absolute bottom-0 right-0 w-6 h-6 bg-primary-500 hover:bg-primary-600 rounded-full flex items-center justify-center text-white transition-colors"
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  {isEditing && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          document.getElementById("avatar-upload").click()
+                        }
+                        className="absolute bottom-0 right-0 w-6 h-6 bg-primary-500 hover:bg-primary-600 rounded-full flex items-center justify-center text-white transition-colors border-2 border-white"
+                      >
+                        <svg
+                          className="w-3 h-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                          />
+                        </svg>
+                      </button>
+                      <input
+                        id="avatar-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarChange}
+                        className="hidden"
                       />
-                    </svg>
-                  </button>
-                  <input
-                    id="avatar-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleAvatarChange}
-                    className="hidden"
-                  />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                        Select a new photo and click <b>Save Changes</b> to
+                        update.
+                      </p>
+                    </>
+                  )}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                   {userInfo.name}

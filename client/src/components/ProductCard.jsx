@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import { Store } from "../context/Store";
-import { useWishlist } from "../context/WishlistContext";
-import StarRating from "./StarRating.jsx";
-import Price from "./Price.jsx";
-import Button from "./Button.jsx";
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { Store } from '../context/Store';
+import { useWishlist } from '../context/WishlistContext';
+import StarRating from './StarRating.jsx';
+import Price from './Price.jsx';
+import Button from './Button.jsx';
 
 const ProductCard = ({ product }) => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -14,25 +14,25 @@ const ProductCard = ({ product }) => {
   const [showQuickView, setShowQuickView] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
-  const isInCart = cart.cartItems.some((item) => item._id === product._id);
-
+  const isInCart = cart.cartItems.some(item => item._id === product._id);
+  
   const addToCartHandler = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
+    
     setIsAddingToCart(true);
-
+    
     // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.qty + 1 : 1;
-
+    
     ctxDispatch({
-      type: "CART_ADD_ITEM",
+      type: 'CART_ADD_ITEM',
       payload: { ...product, qty: quantity },
     });
-
+    
     setIsAddingToCart(false);
   };
 
@@ -50,41 +50,25 @@ const ProductCard = ({ product }) => {
 
   const getBadges = () => {
     const badges = [];
-
+    
     // Calculate if product is on sale
     const originalPrice = product.originalPrice || product.price * 1.2;
     if (originalPrice > product.price) {
-      const discount = Math.round(
-        ((originalPrice - product.price) / originalPrice) * 100
-      );
-      badges.push({
-        text: `-${discount}%`,
-        color: "bg-gradient-secondary",
-        position: "top-left",
-      });
+      const discount = Math.round(((originalPrice - product.price) / originalPrice) * 100);
+      badges.push({ text: `-${discount}%`, color: 'bg-gradient-secondary', position: 'top-left' });
     }
-
+    
     // New product badge
-    const isNew =
-      new Date(product.createdAt || Date.now()) >
-      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const isNew = new Date(product.createdAt || Date.now()) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     if (isNew) {
-      badges.push({
-        text: "NEW",
-        color: "bg-gradient-primary",
-        position: "top-right",
-      });
+      badges.push({ text: 'NEW', color: 'bg-gradient-primary', position: 'top-right' });
     }
-
+    
     // Low stock badge
     if (product.countInStock && product.countInStock < 5) {
-      badges.push({
-        text: `Only ${product.countInStock} left`,
-        color: "bg-red-500",
-        position: "bottom-right",
-      });
+      badges.push({ text: `Only ${product.countInStock} left`, color: 'bg-red-500', position: 'bottom-right' });
     }
-
+    
     return badges;
   };
 
@@ -92,94 +76,67 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="group relative">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-modern dark:shadow-lg hover:shadow-modern-xl dark:hover:shadow-2xl transition-all duration-500 cursor-pointer group border border-gray-100 dark:border-gray-800">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-modern hover:shadow-modern-xl transition-all duration-500 cursor-pointer group">
         {/* Image Container */}
-        <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
-          {/* Skeleton loader overlays only image */}
+        <div className="relative aspect-square overflow-hidden bg-gray-100">
+          {/* Skeleton loader */}
+          {!isImageLoaded && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+          )}
+          
+          {/* Product Image */}
           <Link to={`/product/${product._id}`}>
-            <img
+            <img 
               className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
-                isImageLoaded ? "opacity-100" : "opacity-0"
-              } bg-gray-100 dark:bg-gray-800`}
-              src={product.image}
+                isImageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              src={product.image} 
               alt={product.name}
               onLoad={() => setIsImageLoaded(true)}
               loading="lazy"
             />
-            {!isImageLoaded && (
-              <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-            )}
           </Link>
+
           {/* Badges */}
           {badges.map((badge, index) => (
             <div
               key={index}
               className={`absolute ${
-                badge.position === "top-left"
-                  ? "top-3 left-3"
-                  : badge.position === "top-right"
-                  ? "top-3 right-3"
-                  : badge.position === "bottom-left"
-                  ? "bottom-3 left-3"
-                  : "bottom-3 right-3"
-              } ${
-                badge.color
-              } text-white text-xs font-bold px-2 py-1 rounded-lg shadow-modern animate-scale-in z-10 border border-white/30 dark:border-gray-700/60`}
+                badge.position === 'top-left' ? 'top-3 left-3' :
+                badge.position === 'top-right' ? 'top-3 right-3' :
+                badge.position === 'bottom-left' ? 'bottom-3 left-3' :
+                'bottom-3 right-3'
+              } ${badge.color} text-white text-xs font-bold px-2 py-1 rounded-lg shadow-modern animate-scale-in z-10`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {badge.text}
             </div>
           ))}
+
           {/* Wishlist Button */}
           <button
             onClick={handleWishlistToggle}
-            className={`absolute top-3 right-3 p-2 rounded-full transition-all duration-300 z-20 border border-gray-200 dark:border-gray-700 ${
+            className={`absolute top-3 right-3 p-2 rounded-full transition-all duration-300 z-20 ${
               isInWishlist(product._id)
-                ? "bg-red-500 text-white shadow-modern"
-                : "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900 hover:text-red-500 dark:hover:text-red-400"
-            } ${
-              badges.some((b) => b.position === "top-right") ? "top-12" : ""
-            }`}
+                ? 'bg-red-500 text-white shadow-modern'
+                : 'bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-red-50 hover:text-red-500'
+            } ${badges.some(b => b.position === 'top-right') ? 'top-12' : ''}`}
           >
-            <svg
-              className="w-4 h-4"
-              fill={isInWishlist(product._id) ? "currentColor" : "none"}
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
+            <svg className="w-4 h-4" fill={isInWishlist(product._id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </button>
+
           {/* Quick Actions Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
-            <div className="absolute bottom-4 left-4 right-4 space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 pointer-events-auto">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <div className="absolute bottom-4 left-4 right-4 space-y-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
               <button
                 onClick={handleQuickView}
-                className="w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-gray-900 dark:text-gray-100 px-4 py-2 rounded-xl font-medium hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-2 border border-gray-200 dark:border-gray-700"
+                className="w-full bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-xl font-medium hover:bg-white transition-all duration-300 flex items-center justify-center gap-2"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
                 Quick View
               </button>
@@ -191,22 +148,22 @@ const ProductCard = ({ product }) => {
         <div className="p-6">
           {/* Category */}
           {product.category && (
-            <span className="inline-block text-xs text-primary-600 dark:text-primary-400 font-semibold uppercase tracking-wide mb-2">
+            <span className="inline-block text-xs text-primary-600 font-semibold uppercase tracking-wide mb-2">
               {product.category}
             </span>
           )}
 
           {/* Product Name */}
           <Link to={`/product/${product._id}`}>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 line-clamp-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-primary-600 transition-colors duration-300">
               {product.name}
             </h3>
           </Link>
 
           {/* Rating */}
           <div className="mb-3">
-            <StarRating
-              rating={product.rating || 4.5}
+            <StarRating 
+              rating={product.rating || 4.5} 
               numReviews={product.numReviews || 0}
               size="sm"
             />
@@ -214,7 +171,7 @@ const ProductCard = ({ product }) => {
 
           {/* Price */}
           <div className="mb-4">
-            <Price
+            <Price 
               price={product.price}
               originalPrice={product.originalPrice}
               size="md"
@@ -226,21 +183,15 @@ const ProductCard = ({ product }) => {
             {product.countInStock > 0 ? (
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-green-600 dark:text-green-400 font-medium">
-                  In Stock
-                </span>
+                <span className="text-sm text-green-600 font-medium">In Stock</span>
                 {product.countInStock < 10 && (
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    ({product.countInStock} left)
-                  </span>
+                  <span className="text-xs text-gray-500">({product.countInStock} left)</span>
                 )}
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                <span className="text-sm text-red-600 dark:text-red-400 font-medium">
-                  Out of Stock
-                </span>
+                <span className="text-sm text-red-600 font-medium">Out of Stock</span>
               </div>
             )}
           </div>
@@ -254,54 +205,28 @@ const ProductCard = ({ product }) => {
                 size="md"
                 fullWidth
                 loading={isAddingToCart}
-                className="group dark:bg-primary-900 dark:text-white"
+                className="group"
               >
                 {isAddingToCart ? (
-                  "Adding..."
+                  'Adding...'
                 ) : isInCart ? (
                   <>
-                    <svg
-                      className="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
                     In Cart
                   </>
                 ) : (
                   <>
-                    <svg
-                      className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
+                    <svg className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                     Add to Cart
                   </>
                 )}
               </Button>
             ) : (
-              <Button
-                variant="outline"
-                size="md"
-                fullWidth
-                disabled
-                className="dark:bg-gray-800 dark:text-gray-400"
-              >
+              <Button variant="outline" size="md" fullWidth disabled>
                 Out of Stock
               </Button>
             )}
@@ -309,67 +234,42 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Hover Effects */}
-        <div className="absolute inset-0 rounded-2xl ring-2 ring-transparent group-hover:ring-primary-200 dark:group-hover:ring-primary-700 transition-all duration-300 pointer-events-none"></div>
+        <div className="absolute inset-0 rounded-2xl ring-2 ring-transparent group-hover:ring-primary-200 transition-all duration-300 pointer-events-none"></div>
       </div>
 
       {/* Quick View Modal */}
       {showQuickView && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-gray-900/80 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-modern-xl dark:shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scale-in border border-gray-100 dark:border-gray-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-modern-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
             <div className="relative p-6">
               <button
                 onClick={() => setShowQuickView(false)}
-                className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-
+              
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="aspect-square rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800">
-                  <img
-                    src={product.image}
+                <div className="aspect-square rounded-2xl overflow-hidden bg-gray-100">
+                  <img 
+                    src={product.image} 
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                    {product.name}
-                  </h2>
-                  <StarRating
-                    rating={product.rating || 4.5}
-                    numReviews={product.numReviews || 0}
-                  />
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">{product.name}</h2>
+                  <StarRating rating={product.rating || 4.5} numReviews={product.numReviews || 0} />
                   <div className="mt-4">
-                    <Price
-                      price={product.price}
-                      originalPrice={product.originalPrice}
-                      size="lg"
-                    />
+                    <Price price={product.price} originalPrice={product.originalPrice} size="lg" />
                   </div>
-                  <p className="text-gray-600 dark:text-gray-300 mt-4 mb-6">
-                    {product.description ||
-                      "Premium quality product with exceptional features and design."}
+                  <p className="text-gray-600 mt-4 mb-6">
+                    {product.description || 'Premium quality product with exceptional features and design.'}
                   </p>
                   <div className="space-y-3">
-                    <Button
-                      onClick={addToCartHandler}
-                      variant="primary"
-                      size="lg"
-                      fullWidth
-                    >
+                    <Button onClick={addToCartHandler} variant="primary" size="lg" fullWidth>
                       Add to Cart
                     </Button>
                     <Link to={`/product/${product._id}`}>
