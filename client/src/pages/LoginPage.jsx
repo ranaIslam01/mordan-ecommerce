@@ -184,7 +184,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center text-sm text-gray-600 dark:text-gray-300">
+        <div className="text-center text-sm text-gray-900">
           <p>By signing in, you agree to our Terms of Service and Privacy Policy</p>
         </div>
       </div>
