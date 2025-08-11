@@ -99,6 +99,16 @@ const Header = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
+            {/* Notifications */}
+            <div className="relative p-2.5 lg:p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-yellow-50 dark:hover:from-orange-900/20 dark:hover:to-yellow-900/20 transition-all duration-300 group border border-transparent hover:border-orange-200 dark:hover:border-orange-700/50 cursor-pointer">
+              <svg className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600 dark:text-gray-200 group-hover:text-orange-600 dark:group-hover:text-orange-300 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-5-5v-5a5.99 5.99 0 00-6-6 5.99 5.99 0 00-6 6v5l-5 5h5m0 0v1a3 3 0 006 0v-1m-3-10h.01" />
+              </svg>
+              <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full h-4 w-4 lg:h-5 lg:w-5 flex items-center justify-center animate-pulse shadow-lg text-[10px]">
+                3
+              </span>
+            </div>
+
             {/* Dark Mode Toggle */}
             <div className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300">
               <DarkModeToggle size="sm" />
