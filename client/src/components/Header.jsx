@@ -229,9 +229,12 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Dark Mode Toggle */}
+            <DarkModeToggle />
+
             {/* Mobile Cart */}
-            <Link 
-              to="/cart" 
+            <Link
+              to="/cart"
               className="relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
               onClick={() => setIsMobileMenuOpen(false)}
             >
