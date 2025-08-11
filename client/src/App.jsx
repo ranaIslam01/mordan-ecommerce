@@ -5,6 +5,7 @@ import { DarkModeProvider } from './context/DarkModeContext.jsx';
 import PerformanceOptimizer from './utils/PerformanceOptimizer';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
+import Breadcrumb from './components/Breadcrumb.jsx';
 import ProjectVibeHomePage from './pages/ProjectVibeHomePage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
