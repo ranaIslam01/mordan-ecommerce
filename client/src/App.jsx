@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { WishlistProvider } from './context/WishlistContext';
-import { DarkModeProvider } from './context/DarkModeContext';
+import { WishlistProvider } from './context/WishlistContext.jsx';
+import { DarkModeProvider } from './context/DarkModeContext.jsx';
 import PerformanceOptimizer from './utils/PerformanceOptimizer';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/Header.jsx';
+import Footer from './components/Footer.jsx';
 import ProjectVibeHomePage from './pages/ProjectVibeHomePage';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
