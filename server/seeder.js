@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import users from './data/users.js'; // (আমরা একটু পরেই এই ফাইলটি তৈরি করব)
-import products from './data/products.js';
-import User from './models/userModel.js';
-import Product from './models/productModel.js';
-import Order from './models/orderModel.js';
-import connectDB from './config/db.js';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import users from "./data/users.js"; // (আমরা একটু পরেই এই ফাইলটি তৈরি করব)
+import products from "./data/products.js";
+import User from "./models/userModel.js";
+import Product from "./models/productModel.js";
+import Order from "./models/orderModel.js";
+import connectDB from "./config/db.js";
 
 dotenv.config();
 connectDB();
@@ -23,9 +23,38 @@ const importData = async () => {
       return { ...product, user: adminUser };
     });
 
-    await Product.insertMany(sampleProducts);
+    const createdProducts = await Product.insertMany(sampleProducts);
 
-    console.log('Data Imported!');
+    // Create a sample order
+    const sampleOrder = {
+      user: adminUser,
+      orderItems: [
+        {
+          name: createdProducts[0].name,
+          qty: 2,
+          image: createdProducts[0].image,
+          price: createdProducts[0].price,
+          product: createdProducts[0]._id,
+        },
+      ],
+      shippingAddress: {
+        address: "123 Main St",
+        city: "Dhaka",
+        postalCode: "1207",
+        country: "Bangladesh",
+      },
+      paymentMethod: "Cash On Delivery",
+      itemsPrice: createdProducts[0].price * 2,
+      taxPrice: 0,
+      shippingPrice: 0,
+      totalPrice: createdProducts[0].price * 2,
+      isPaid: false,
+      isDelivered: false,
+    };
+
+    await Order.create(sampleOrder);
+
+    console.log("Data Imported!");
     process.exit();
   } catch (error) {
     console.error(`${error}`);
@@ -39,7 +68,7 @@ const destroyData = async () => {
     await Product.deleteMany();
     await User.deleteMany();
 
-    console.log('Data Destroyed!');
+    console.log("Data Destroyed!");
     process.exit();
   } catch (error) {
     console.error(`${error}`);
@@ -47,7 +76,7 @@ const destroyData = async () => {
   }
 };
 
-if (process.argv[2] === '-d') {
+if (process.argv[2] === "-d") {
   destroyData();
 } else {
   importData();

@@ -1,4 +1,4 @@
-import Product from '../models/productModel.js';
+import Product from "../models/productModel.js";
 
 // @desc    Fetch all products OR products matching a keyword
 // @route   GET /api/products?keyword=yourSearchTerm
@@ -10,7 +10,7 @@ const getProducts = async (req, res) => {
     ? {
         name: {
           $regex: req.query.keyword,
-          $options: 'i',
+          $options: "i",
         },
       }
     : {};
@@ -27,8 +27,13 @@ const getProducts = async (req, res) => {
       total: count,
     });
   } catch (error) {
-    console.error(`Error fetching products: ${error.message}`);
-    res.status(500).json({ message: 'Server Error: Could not fetch products' });
+    console.error("Error fetching products:", error);
+    res
+      .status(500)
+      .json({
+        message: "Server Error: Could not fetch products",
+        error: error.stack,
+      });
   }
 };
 
@@ -41,11 +46,13 @@ const getProductById = async (req, res) => {
     if (product) {
       res.json(product);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
     console.error(`Error fetching product by ID: ${error.message}`);
-    res.status(500).json({ message: 'Server Error: Could not fetch product details' });
+    res
+      .status(500)
+      .json({ message: "Server Error: Could not fetch product details" });
   }
 };
 
@@ -65,7 +72,9 @@ const createProductReview = async (req, res) => {
       );
 
       if (alreadyReviewed) {
-        res.status(400).json({ message: 'Product already reviewed by this user' });
+        res
+          .status(400)
+          .json({ message: "Product already reviewed by this user" });
         return;
       }
 
@@ -86,13 +95,13 @@ const createProductReview = async (req, res) => {
         product.reviews.length;
 
       await product.save(); // প্রোডাক্টটি সেভ করা হচ্ছে ডাটাবেসে
-      res.status(201).json({ message: 'Review added successfully' });
+      res.status(201).json({ message: "Review added successfully" });
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
     console.error(`Error creating product review: ${error.message}`);
-    res.status(500).json({ message: 'Server Error: Could not add review' });
+    res.status(500).json({ message: "Server Error: Could not add review" });
   }
 };
 

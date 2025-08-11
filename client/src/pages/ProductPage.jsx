@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useContext, useReducer } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import { Store } from '../context/Store';
-import { useWishlist } from '../context/WishlistContext';
-import Button from '../components/Button';
-import StarRating from '../components/StarRating';
+import React, { useState, useEffect, useContext, useReducer } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { Store } from "../context/Store";
+import { useWishlist } from "../context/WishlistContext";
+import Button from "../components/Button";
+import StarRating from "../components/StarRating";
 
 // Product fetch korar jonno reducer
 const productFetchReducer = (state, action) => {
   switch (action.type) {
-    case 'FETCH_REQUEST':
+    case "FETCH_REQUEST":
       return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
+    case "FETCH_SUCCESS":
       return { ...state, product: action.payload, loading: false };
-    case 'FETCH_FAIL':
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
       return state;
@@ -23,14 +23,19 @@ const productFetchReducer = (state, action) => {
 // Review submit korar jonno reducer
 const reviewSubmitReducer = (state, action) => {
   switch (action.type) {
-    case 'SUBMIT_REQUEST':
+    case "SUBMIT_REQUEST":
       return { ...state, loadingSubmit: true };
-    case 'SUBMIT_SUCCESS':
+    case "SUBMIT_SUCCESS":
       return { ...state, loadingSubmit: false, successSubmit: true };
-    case 'SUBMIT_FAIL':
+    case "SUBMIT_FAIL":
       return { ...state, loadingSubmit: false, errorSubmit: action.payload };
-    case 'SUBMIT_RESET':
-      return { ...state, loadingSubmit: false, successSubmit: false, errorSubmit: '' };
+    case "SUBMIT_RESET":
+      return {
+        ...state,
+        loadingSubmit: false,
+        successSubmit: false,
+        errorSubmit: "",
+      };
     default:
       return state;
   }
@@ -43,19 +48,23 @@ export default function ProductPage() {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   // Product fetch korar jonno state ebong dispatch
-  const [{ loading, error, product }, dispatchProduct] = useReducer(productFetchReducer, {
-    product: { reviews: [] },
-    loading: true,
-    error: '',
-  });
+  const [{ loading, error, product }, dispatchProduct] = useReducer(
+    productFetchReducer,
+    {
+      product: { reviews: [] },
+      loading: true,
+      error: "",
+    }
+  );
 
   // Review submit korar jonno state ebong dispatch
-  const [{ loadingSubmit, errorSubmit, successSubmit }, dispatchReview] = useReducer(reviewSubmitReducer, {
-    loadingSubmit: false,
-    errorSubmit: '',
-    successSubmit: false,
-  });
-  
+  const [{ loadingSubmit, errorSubmit, successSubmit }, dispatchReview] =
+    useReducer(reviewSubmitReducer, {
+      loadingSubmit: false,
+      errorSubmit: "",
+      successSubmit: false,
+    });
+
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [showFullscreen, setShowFullscreen] = useState(false);
@@ -64,24 +73,29 @@ export default function ProductPage() {
 
   // Review er jonno state
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     const fetchProduct = async () => {
-      dispatchProduct({ type: 'FETCH_REQUEST' });
+      dispatchProduct({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL || ''}/api/products/${productId}`);
-        dispatchProduct({ type: 'FETCH_SUCCESS', payload: data });
+        const baseUrl = (
+          process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+        ).replace(/\/?$/, "");
+        const { data } = await axios.get(
+          `${baseUrl}/api/products/${productId}`
+        );
+        dispatchProduct({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
-        dispatchProduct({ type: 'FETCH_FAIL', payload: err.message });
+        dispatchProduct({ type: "FETCH_FAIL", payload: err.message });
       }
     };
     fetchProduct();
 
     if (successSubmit) {
-        dispatchReview({ type: 'SUBMIT_RESET' });
-        setRating(0);
-        setComment('');
+      dispatchReview({ type: "SUBMIT_RESET" });
+      setRating(0);
+      setComment("");
     }
   }, [productId, successSubmit]);
 
@@ -90,34 +104,39 @@ export default function ProductPage() {
     const quantity = existItem ? existItem.qty + qty : qty;
 
     if (product.countInStock < quantity) {
-      alert('Sorry. Product is out of stock');
+      alert("Sorry. Product is out of stock");
       return;
     }
     ctxDispatch({
-      type: 'CART_ADD_ITEM',
+      type: "CART_ADD_ITEM",
       payload: { ...product, qty: quantity },
     });
-    navigate('/cart');
+    navigate("/cart");
   };
 
   const submitReviewHandler = async (e) => {
     e.preventDefault();
     if (!comment || !rating) {
-      alert('Please enter comment and rating');
+      alert("Please enter comment and rating");
       return;
     }
-    dispatchReview({ type: 'SUBMIT_REQUEST' });
+    dispatchReview({ type: "SUBMIT_REQUEST" });
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL || ''}/api/products/${productId}/reviews`,
+        `${(
+          process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+        ).replace(/\/?$/, "")}/api/products/${productId}/reviews`,
         { rating, comment },
         { withCredentials: true }
       );
-      dispatchReview({ type: 'SUBMIT_SUCCESS' });
-      alert('Review submitted successfully. It might take a moment to appear.');
+      dispatchReview({ type: "SUBMIT_SUCCESS" });
+      alert("Review submitted successfully. It might take a moment to appear.");
     } catch (err) {
-      dispatchReview({ type: 'SUBMIT_FAIL', payload: err.response?.data?.message || err.message });
-      alert(err.response?.data?.message || 'Failed to submit review');
+      dispatchReview({
+        type: "SUBMIT_FAIL",
+        payload: err.response?.data?.message || err.message,
+      });
+      alert(err.response?.data?.message || "Failed to submit review");
     }
   };
 
@@ -134,7 +153,9 @@ export default function ProductPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400 text-lg">Loading product details...</p>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">
+            Loading product details...
+          </p>
         </div>
       </div>
     );
@@ -145,11 +166,23 @@ export default function ProductPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.318 15.5c-.77.833.192 2.5 1.732 2.5z" />
+            <svg
+              className="w-8 h-8 text-red-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.318 15.5c-.77.833.192 2.5 1.732 2.5z"
+              />
             </svg>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Error Loading Product</h3>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Error Loading Product
+          </h3>
           <p className="text-red-500 mb-4">{error}</p>
           <Link to="/">
             <Button variant="primary">Go Back Home</Button>
@@ -161,7 +194,11 @@ export default function ProductPage() {
 
   // Mock additional images for gallery (in real app, this would come from API)
   const productImages = [
-    product.image?.startsWith('http') ? product.image : product.image?.startsWith('/images/') ? product.image : `/images/${product.image}`,
+    product.image?.startsWith("http")
+      ? product.image
+      : product.image?.startsWith("/images/")
+      ? product.image
+      : `/images/${product.image}`,
     // Add more images here when available
   ];
 
@@ -170,13 +207,37 @@ export default function ProductPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400 mb-8">
-          <Link to="/" className="hover:text-primary-600 transition-colors">Home</Link>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+          <Link to="/" className="hover:text-primary-600 transition-colors">
+            Home
+          </Link>
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
-          <Link to="/" className="hover:text-primary-600 transition-colors">Products</Link>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+          <Link to="/" className="hover:text-primary-600 transition-colors">
+            Products
+          </Link>
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
           <span className="text-gray-900 dark:text-white">{product.name}</span>
         </nav>
@@ -195,14 +256,24 @@ export default function ProductPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                
+
                 {/* Fullscreen Button */}
                 <button
                   onClick={() => setShowFullscreen(true)}
                   className="absolute top-4 right-4 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-all duration-300"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                    />
                   </svg>
                 </button>
 
@@ -210,13 +281,23 @@ export default function ProductPage() {
                 <button
                   onClick={toggleWishlist}
                   className={`absolute top-4 left-4 w-12 h-12 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 ${
-                    isInWishlist(product._id) 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-black/50 text-white hover:bg-red-500'
+                    isInWishlist(product._id)
+                      ? "bg-red-500 text-white"
+                      : "bg-black/50 text-white hover:bg-red-500"
                   }`}
                 >
-                  <svg className="w-5 h-5" fill={isInWishlist(product._id) ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  <svg
+                    className="w-5 h-5"
+                    fill={isInWishlist(product._id) ? "currentColor" : "none"}
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
                   </svg>
                 </button>
               </div>
@@ -229,12 +310,16 @@ export default function ProductPage() {
                       key={index}
                       onClick={() => setSelectedImage(index)}
                       className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
-                        selectedImage === index 
-                          ? 'border-primary-500 ring-2 ring-primary-200' 
-                          : 'border-gray-200 hover:border-primary-300'
+                        selectedImage === index
+                          ? "border-primary-500 ring-2 ring-primary-200"
+                          : "border-gray-200 hover:border-primary-300"
                       }`}
                     >
-                      <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                      <img
+                        src={image}
+                        alt={`${product.name} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>
@@ -249,16 +334,16 @@ export default function ProductPage() {
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
-                    {product.brand || 'Premium Brand'}
+                    {product.brand || "Premium Brand"}
                   </span>
                   <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                    {product.category || 'Electronics'}
+                    {product.category || "Electronics"}
                   </span>
                 </div>
                 <h1 className="text-3xl xl:text-4xl font-bold text-gray-900 dark:text-white mb-4 font-serif">
                   {product.name}
                 </h1>
-                
+
                 {/* Rating */}
                 <div className="flex items-center gap-4 mb-4">
                   <StarRating rating={product.rating} size="lg" />
@@ -281,12 +366,16 @@ export default function ProductPage() {
                     20% OFF
                   </span>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">Inclusive of all taxes</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Inclusive of all taxes
+                </p>
               </div>
 
               {/* Description */}
               <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Description
+                </h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                   {product.description}
                 </p>
@@ -295,9 +384,21 @@ export default function ProductPage() {
               {/* Stock Status */}
               <div className="mb-6">
                 <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full ${product.countInStock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                  <span className={`font-medium ${product.countInStock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {product.countInStock > 0 ? `${product.countInStock} in stock` : 'Out of Stock'}
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      product.countInStock > 0 ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  ></div>
+                  <span
+                    className={`font-medium ${
+                      product.countInStock > 0
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {product.countInStock > 0
+                      ? `${product.countInStock} in stock`
+                      : "Out of Stock"}
                   </span>
                 </div>
               </div>
@@ -305,25 +406,49 @@ export default function ProductPage() {
               {/* Quantity Selector */}
               {product.countInStock > 0 && (
                 <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Quantity</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                    Quantity
+                  </h3>
                   <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-2xl p-1 w-fit">
                     <button
                       onClick={() => setQty(Math.max(1, qty - 1))}
                       className="w-12 h-12 rounded-xl bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-primary-50 hover:text-primary-600 transition-all duration-200 flex items-center justify-center"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M20 12H4"
+                        />
                       </svg>
                     </button>
                     <span className="w-16 text-center font-semibold text-gray-900 dark:text-white text-lg">
                       {qty}
                     </span>
                     <button
-                      onClick={() => setQty(Math.min(product.countInStock, qty + 1))}
+                      onClick={() =>
+                        setQty(Math.min(product.countInStock, qty + 1))
+                      }
                       className="w-12 h-12 rounded-xl bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-primary-50 hover:text-primary-600 transition-all duration-200 flex items-center justify-center"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -341,10 +466,22 @@ export default function ProductPage() {
                   className="h-14 text-lg font-semibold shadow-glow-lg hover:shadow-glow-lg transition-all duration-300"
                 >
                   <div className="flex items-center justify-center gap-3">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
                     </svg>
-                    {product.countInStock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                    {product.countInStock === 0
+                      ? "Out of Stock"
+                      : "Add to Cart"}
                   </div>
                 </Button>
 
@@ -355,8 +492,18 @@ export default function ProductPage() {
                   className="h-12"
                 >
                   <div className="flex items-center justify-center gap-3">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
                     </svg>
                     Buy Now
                   </div>
@@ -367,26 +514,66 @@ export default function ProductPage() {
               <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400">
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-4 h-4 text-green-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     Free Shipping
                   </div>
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    <svg
+                      className="w-4 h-4 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                      />
                     </svg>
                     Easy Returns
                   </div>
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    <svg
+                      className="w-4 h-4 text-purple-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
                     </svg>
                     Secure Payment
                   </div>
                   <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-4 h-4 text-orange-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     24/7 Support
                   </div>
@@ -414,7 +601,7 @@ export default function ProductPage() {
                   Based on {product.numReviews} reviews
                 </p>
               </div>
-              
+
               <div className="md:col-span-2">
                 {/* Rating Distribution would go here */}
                 <div className="space-y-2">
@@ -422,8 +609,8 @@ export default function ProductPage() {
                     <div key={stars} className="flex items-center gap-3">
                       <span className="text-sm w-8">{stars}★</span>
                       <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div 
-                          className="bg-primary-500 h-2 rounded-full" 
+                        <div
+                          className="bg-primary-500 h-2 rounded-full"
                           style={{ width: `${Math.random() * 80 + 10}%` }}
                         ></div>
                       </div>
@@ -440,34 +627,54 @@ export default function ProductPage() {
             {product.reviews?.length === 0 ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  <svg
+                    className="w-8 h-8 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    />
                   </svg>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No reviews yet</h3>
-                <p className="text-gray-500">Be the first to review this product!</p>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                  No reviews yet
+                </h3>
+                <p className="text-gray-500">
+                  Be the first to review this product!
+                </p>
               </div>
             ) : (
               <div className="space-y-6">
                 {product.reviews?.map((review, index) => (
-                  <div 
-                    key={review._id} 
+                  <div
+                    key={review._id}
                     className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 animate-slide-up"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold">
-                          {review.name?.charAt(0) || 'U'}
+                          {review.name?.charAt(0) || "U"}
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 dark:text-white">{review.name}</h4>
-                          <p className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+                          <h4 className="font-semibold text-gray-900 dark:text-white">
+                            {review.name}
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            {new Date(review.createdAt).toLocaleDateString()}
+                          </p>
                         </div>
                       </div>
                       <StarRating rating={review.rating} />
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{review.comment}</p>
+                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                      {review.comment}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -478,7 +685,7 @@ export default function ProductPage() {
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 font-serif">
                 Write a Review
               </h3>
-              
+
               {userInfo ? (
                 <form onSubmit={submitReviewHandler} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
@@ -486,10 +693,10 @@ export default function ProductPage() {
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Rating
                       </label>
-                      <select 
-                        value={rating} 
-                        onChange={(e) => setRating(Number(e.target.value))} 
-                        required 
+                      <select
+                        value={rating}
+                        onChange={(e) => setRating(Number(e.target.value))}
+                        required
                         className="w-full p-4 border border-gray-200/50 rounded-2xl bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       >
                         <option value="">Select Rating</option>
@@ -501,24 +708,24 @@ export default function ProductPage() {
                       </select>
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       Your Review
                     </label>
-                    <textarea 
-                      rows="4" 
-                      value={comment} 
-                      onChange={(e) => setComment(e.target.value)} 
-                      required 
+                    <textarea
+                      rows="4"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      required
                       placeholder="Share your thoughts about this product..."
                       className="w-full p-4 border border-gray-200/50 rounded-2xl bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-gray-400 resize-none"
                     ></textarea>
                   </div>
-                  
+
                   <Button
-                    type="submit" 
-                    disabled={loadingSubmit} 
+                    type="submit"
+                    disabled={loadingSubmit}
                     variant="primary"
                     size="lg"
                     className="px-8"
@@ -529,10 +736,10 @@ export default function ProductPage() {
                         Submitting...
                       </div>
                     ) : (
-                      'Submit Review'
+                      "Submit Review"
                     )}
                   </Button>
-                  
+
                   {errorSubmit && (
                     <div className="text-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-2xl">
                       {errorSubmit}
@@ -542,8 +749,18 @@ export default function ProductPage() {
               ) : (
                 <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-8 text-center">
                   <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <svg
+                      className="w-8 h-8 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -569,8 +786,18 @@ export default function ProductPage() {
             onClick={() => setShowFullscreen(false)}
             className="absolute top-4 right-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
           <img

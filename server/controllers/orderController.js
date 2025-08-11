@@ -1,4 +1,4 @@
-import Order from '../models/orderModel.js';
+import Order from "../models/orderModel.js";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -15,11 +15,15 @@ const addOrderItems = async (req, res) => {
   } = req.body;
 
   if (orderItems && orderItems.length === 0) {
-    res.status(400).json({ message: 'No order items' });
+    res.status(400).json({ message: "No order items" });
     return;
   } else {
     const order = new Order({
-      orderItems: orderItems.map((x) => ({ ...x, product: x._id, _id: undefined })),
+      orderItems: orderItems.map((x) => ({
+        ...x,
+        product: x._id,
+        _id: undefined,
+      })),
       user: req.user._id,
       shippingAddress,
       paymentMethod,
@@ -47,14 +51,14 @@ const getMyOrders = async (req, res) => {
 // @access  Private
 const getOrderById = async (req, res) => {
   const order = await Order.findById(req.params.id).populate(
-    'user',
-    'name email'
+    "user",
+    "name email"
   );
 
   if (order) {
     res.status(200).json(order);
   } else {
-    res.status(404).json({ message: 'Order not found' });
+    res.status(404).json({ message: "Order not found" });
   }
 };
 
