@@ -60,10 +60,10 @@ export default function LoginPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
           </div>
-          <h2 className="mt-6 text-4xl xl:text-5xl font-bold text-gradient font-serif">
+          <h2 className="mt-6 text-4xl xl:text-5xl font-bold text-white dark:text-gray-900 font-serif">
             Welcome Back
           </h2>
-          <p className="mt-2 text-lg text-gray-700 dark:text-gray-200 drop-shadow-sm">
+          <p className="mt-2 text-lg text-gray-900 dark:text-gray-200 drop-shadow-sm">
             Sign in to your account to continue shopping
           </p>
         </div>
