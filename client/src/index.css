@@ -644,6 +644,8 @@ body {
   padding-bottom: 16px;
   scrollbar-width: thin;
   scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .filter-scroll-wrapper::-webkit-scrollbar {
