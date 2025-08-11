@@ -114,7 +114,7 @@ const CinematicHero = () => {
   const currentHero = heroSlides[currentSlide];
 
   return (
-    <div className="hero-cinematic relative overflow-hidden" ref={heroRef}>
+    <div className="hero-cinematic relative overflow-hidden w-full max-w-full" ref={heroRef}>
       {/* Background Layers with Parallax */}
       <div className="parallax-container absolute inset-0">
         {heroSlides.map((slide, index) => (
@@ -143,10 +143,10 @@ const CinematicHero = () => {
       </div>
 
       {/* Floating Geometric Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 border border-white/20 rotate-45 animate-float opacity-30" />
-        <div className="absolute bottom-1/3 right-1/4 w-24 h-24 border border-white/15 rotate-12 animate-float opacity-20" style={{animationDelay: '2s'}} />
-        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-white/10 rounded-full animate-float opacity-25" style={{animationDelay: '4s'}} />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-16 sm:w-32 h-16 sm:h-32 border border-white/20 rotate-45 animate-float opacity-30" />
+        <div className="absolute bottom-1/3 right-1/4 w-12 sm:w-24 h-12 sm:h-24 border border-white/15 rotate-12 animate-float opacity-20" style={{animationDelay: '2s'}} />
+        <div className="absolute top-1/2 right-1/3 w-8 sm:w-16 h-8 sm:h-16 bg-white/10 rounded-full animate-float opacity-25" style={{animationDelay: '4s'}} />
       </div>
 
       {/* Main Content with Intentional Asymmetry */}
@@ -218,7 +218,7 @@ const CinematicHero = () => {
                 </div>
                 <div className="w-px h-12 bg-white/20" />
                 <div className="text-center">
-                  <div className="hierarchy-secondary text-white">4.9★</div>
+                  <div className="hierarchy-secondary text-white">4.9���</div>
                   <div className="text-sm text-white/60">Average Rating</div>
                 </div>
                 <div className="w-px h-12 bg-white/20" />
