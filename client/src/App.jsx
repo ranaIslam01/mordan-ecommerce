@@ -44,7 +44,8 @@ function App() {
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
             <Header />
-            <main className="flex-grow pt-20">
+            <Breadcrumb />
+            <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<ProjectVibeHomePage />} />
                 <Route path="/classic" element={<HomePage />} />
