@@ -135,6 +135,27 @@ const ProjectVibeHomePage = () => {
 
   const hasFilters = keyword || category || priceRange.min || priceRange.max || sortBy !== 'featured';
 
+  // Vibe Filter Scroll Detection
+  useEffect(() => {
+    const checkVibeFilterScroll = () => {
+      if (vibeFilterScrollRef.current && vibeFilterContainerRef.current) {
+        const scrollContainer = vibeFilterScrollRef.current;
+        const container = vibeFilterContainerRef.current;
+
+        if (scrollContainer.scrollWidth > scrollContainer.clientWidth) {
+          container.classList.add('has-scroll');
+        } else {
+          container.classList.remove('has-scroll');
+        }
+      }
+    };
+
+    checkVibeFilterScroll();
+    window.addEventListener('resize', checkVibeFilterScroll);
+
+    return () => window.removeEventListener('resize', checkVibeFilterScroll);
+  }, [products, sortOptions]);
+
   const categories = [
     { name: 'All', value: '', icon: '🛍️', color: 'from-gray-400 to-gray-600' },
     { name: 'Electronics', value: 'electronics', icon: '📱', color: 'from-blue-400 to-blue-600' },
