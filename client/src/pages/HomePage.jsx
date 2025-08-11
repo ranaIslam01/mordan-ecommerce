@@ -212,8 +212,8 @@ const HomePage = () => {
 
         {/* Filters and Sort - Horizontal Scroll Layout */}
         <div className="mb-8 animate-slide-up">
-          <div className="filter-container overflow-x-auto">
-            <div className="filter-scroll-wrapper flex gap-4 pb-4">
+          <div ref={filterContainerRef} className="filter-container overflow-x-auto">
+            <div ref={filterScrollRef} className="filter-scroll-wrapper flex gap-4 pb-4">
 
               {/* Sort By Filter */}
               <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
