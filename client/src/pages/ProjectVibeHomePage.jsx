@@ -246,8 +246,8 @@ const ProjectVibeHomePage = () => {
 
         {/* Responsive Horizontal Filter Panel */}
         <div className="mb-12 scroll-trigger">
-          <div className="vibe-filter-container">
-            <div className="vibe-filter-scroll overflow-x-auto">
+          <div ref={vibeFilterContainerRef} className="vibe-filter-container">
+            <div ref={vibeFilterScrollRef} className="vibe-filter-scroll overflow-x-auto">
               <div className="vibe-filter-wrapper flex gap-4 pb-4">
 
                 {/* Sort By Filters */}
