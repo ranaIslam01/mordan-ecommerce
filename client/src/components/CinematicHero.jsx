@@ -128,7 +128,7 @@ const CinematicHero = () => {
               backgroundImage: `url(${slide.image})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              backgroundAttachment: 'fixed'
+              backgroundAttachment: window.innerWidth > 768 ? 'fixed' : 'scroll'
             }}
           >
             {/* Sophisticated Overlay */}
