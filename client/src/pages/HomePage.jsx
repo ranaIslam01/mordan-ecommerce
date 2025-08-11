@@ -137,6 +137,27 @@ const HomePage = () => {
 
   const hasFilters = keyword || category || priceRange.min || priceRange.max || sortBy !== 'featured';
 
+  // Check if filter container has horizontal scroll
+  useEffect(() => {
+    const checkScroll = () => {
+      if (filterScrollRef.current && filterContainerRef.current) {
+        const container = filterScrollRef.current;
+        const wrapper = filterContainerRef.current;
+
+        if (container.scrollWidth > container.clientWidth) {
+          wrapper.classList.add('has-scroll');
+        } else {
+          wrapper.classList.remove('has-scroll');
+        }
+      }
+    };
+
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [products]);
+
   const ProductSkeleton = () => (
     <div className="animate-pulse">
       <div className="bg-gray-300 aspect-square rounded-2xl mb-4"></div>
