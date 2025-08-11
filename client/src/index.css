@@ -862,60 +862,92 @@ body {
   opacity: 0.8;
 }
 
-/* Mobile specific optimizations - 2 Line Layout */
-@media (max-width: 640px) {
-  .vibe-filter-scroll {
-    overflow: visible;
-  }
+/* Universal Responsive Filter Layout */
 
+/* Base responsive layout for all devices */
+.vibe-filter-scroll {
+  overflow: visible;
+}
+
+.vibe-filter-wrapper {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  min-width: 100%;
+  padding-bottom: 12px;
+}
+
+.vibe-filter-card {
+  min-width: unset;
+  width: 100%;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 90px;
+  transition: all 0.3s ease;
+}
+
+.vibe-filter-card .flex {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.vibe-icon-wrapper {
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.vibe-filter-label {
+  line-height: 1.2;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.vibe-filter-value {
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 100%;
+  font-weight: 600;
+}
+
+/* Mobile Layout (up to 640px) */
+@media (max-width: 640px) {
   .vibe-filter-wrapper {
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    width: 100%;
-    min-width: 100%;
-    padding-bottom: 12px;
   }
 
   .vibe-filter-card {
-    min-width: unset;
-    width: 100%;
     padding: 12px 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     min-height: 80px;
   }
 
-  .vibe-filter-card .flex {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 6px;
-  }
-
   .vibe-icon-wrapper {
-    width: 32px;
-    height: 32px;
-    margin: 0 auto;
+    width: 30px;
+    height: 30px;
   }
 
   .vibe-filter-label {
-    font-size: 10px;
-    line-height: 1.2;
-    text-align: center;
+    font-size: 9px;
   }
 
   .vibe-filter-value {
-    font-size: 12px;
-    line-height: 1.3;
-    text-align: center;
-    white-space: normal;
-    word-wrap: break-word;
-    max-width: 100%;
+    font-size: 11px;
   }
 
-  /* Price Range Card - Full width on bottom */
+  .vibe-price-input {
+    width: 45px;
+    font-size: 10px;
+    padding: 3px 5px;
+  }
+
+  /* Special layouts for mobile */
   .vibe-filter-card:has(.vibe-price-input) {
     grid-column: 1 / -1;
     min-height: auto;
@@ -927,34 +959,160 @@ body {
     text-align: left;
   }
 
-  .vibe-price-input {
-    width: 50px;
-    font-size: 11px;
+  .vibe-filter-card:has([title="Asymmetric"]) button {
     padding: 4px 6px;
+    font-size: 12px;
+    min-width: 32px;
+  }
+}
+
+/* Tablet Layout (641px to 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .vibe-filter-wrapper {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
   }
 
-  /* View Mode Card - Compact buttons */
+  .vibe-filter-card {
+    padding: 16px 12px;
+    min-height: 95px;
+  }
+
+  .vibe-icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .vibe-filter-label {
+    font-size: 11px;
+  }
+
+  .vibe-filter-value {
+    font-size: 13px;
+  }
+
+  .vibe-price-input {
+    width: 55px;
+    font-size: 12px;
+    padding: 5px 7px;
+  }
+
+  /* Price Range spans 2 columns on tablet */
+  .vibe-filter-card:has(.vibe-price-input) {
+    grid-column: span 2;
+  }
+
+  .vibe-filter-card:has(.vibe-price-input) .flex {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 12px;
+  }
+}
+
+/* Desktop Layout (1025px and above) */
+@media (min-width: 1025px) {
+  .vibe-filter-wrapper {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .vibe-filter-card {
+    padding: 18px 16px;
+    min-height: 100px;
+  }
+
+  .vibe-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .vibe-filter-label {
+    font-size: 12px;
+  }
+
+  .vibe-filter-value {
+    font-size: 14px;
+  }
+
+  .vibe-price-input {
+    width: 65px;
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  /* Price Range spans 2 columns on desktop */
+  .vibe-filter-card:has(.vibe-price-input) {
+    grid-column: span 2;
+  }
+
+  .vibe-filter-card:has(.vibe-price-input) .flex {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 16px;
+  }
+
+  /* View Mode gets better spacing */
+  .vibe-filter-card:has([title="Asymmetric"]) .flex > div:last-child .flex {
+    gap: 4px;
+  }
+
+  .vibe-filter-card:has([title="Asymmetric"]) button {
+    padding: 8px 12px;
+    font-size: 14px;
+    min-width: 40px;
+  }
+}
+
+/* Large Desktop Layout (1400px and above) */
+@media (min-width: 1400px) {
+  .vibe-filter-wrapper {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+  }
+
+  .vibe-filter-card {
+    padding: 20px 18px;
+    min-height: 110px;
+  }
+
+  .vibe-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .vibe-filter-label {
+    font-size: 13px;
+  }
+
+  .vibe-filter-value {
+    font-size: 15px;
+  }
+
+  /* Price Range spans 2 columns */
+  .vibe-filter-card:has(.vibe-price-input) {
+    grid-column: span 2;
+  }
+}
+
+/* Common responsive enhancements */
+@media (min-width: 641px) {
+  .vibe-filter-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .vibe-filter-card:has(.vibe-price-input) .flex {
+    align-items: center;
+  }
+
   .vibe-filter-card:has([title="Asymmetric"]) .flex {
-    flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
 
   .vibe-filter-card:has([title="Asymmetric"]) .flex > div:last-child .flex {
     flex-direction: row;
-    gap: 2px;
-  }
-
-  .vibe-filter-card:has([title="Asymmetric"]) button {
-    padding: 6px 8px;
-    font-size: 14px;
-    min-width: 36px;
-  }
-
-  /* Clear All and Advanced Filters - Full width on separate row */
-  .vibe-filter-card:has([class*="red-"]),
-  .vibe-filter-card:has(svg[stroke="currentColor"]) {
-    grid-column: 1 / -1;
-    min-height: auto;
   }
 }
 
