@@ -154,7 +154,7 @@ const ProjectVibeHomePage = () => {
     window.addEventListener('resize', checkVibeFilterScroll);
 
     return () => window.removeEventListener('resize', checkVibeFilterScroll);
-  }, [products, sortOptions]);
+  }, [products]);
 
   const categories = [
     { name: 'All', value: '', icon: '🛍️', color: 'from-gray-400 to-gray-600' },
