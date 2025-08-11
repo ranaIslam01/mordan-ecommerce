@@ -718,7 +718,7 @@ const ProjectVibeHomePage = () => {
 
         {/* AI-Powered Recommendations - Only show when no search/filters */}
         {!hasFilters && products && products.length > 0 && (
-          <div className="mt-24">
+          <div className="mt-24 bg-white dark:bg-gray-900/90 border border-gray-200 dark:border-gray-700 rounded-3xl shadow-xl dark:shadow-2xl p-8">
             <Recommendations type="general" />
           </div>
         )}

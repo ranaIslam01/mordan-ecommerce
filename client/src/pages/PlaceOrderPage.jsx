@@ -73,13 +73,13 @@ export default function PlaceOrderPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-2 sm:px-0">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-8 px-2 sm:px-0">
       <div className="w-full max-w-5xl">
         <CheckoutSteps step1 step2 step3 step4 />
         <div className="grid md:grid-cols-3 gap-8 mt-4">
           <div className="md:col-span-2 space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl p-6">
+              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 dark:text-primary-300 flex items-center gap-2">
                 <svg
                   className="w-6 h-6 text-primary-500"
                   fill="none"
@@ -100,7 +100,7 @@ export default function PlaceOrderPage() {
                 </svg>
                 Shipping
               </h2>
-              <div className="text-gray-700">
+              <div className="text-gray-700 dark:text-gray-200">
                 <div>
                   <span className="font-semibold">Name:</span>{" "}
                   {cart.shippingAddress.fullName || userInfo.name}
@@ -113,8 +113,8 @@ export default function PlaceOrderPage() {
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl p-6">
+              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 dark:text-primary-300 flex items-center gap-2">
                 <svg
                   className="w-6 h-6 text-primary-500"
                   fill="none"
@@ -138,13 +138,13 @@ export default function PlaceOrderPage() {
                 </svg>
                 Payment
               </h2>
-              <div className="text-gray-700">
+              <div className="text-gray-700 dark:text-gray-200">
                 <span className="font-semibold">Method:</span>{" "}
                 {cart.paymentMethod}
               </div>
             </div>
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl p-6">
+              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 dark:text-primary-300 flex items-center gap-2">
                 <svg
                   className="w-6 h-6 text-primary-500"
                   fill="none"
@@ -165,7 +165,7 @@ export default function PlaceOrderPage() {
                 </svg>
                 Items
               </h2>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {cart.cartItems.map((item) => (
                   <div key={item._id} className="flex items-center py-3 gap-4">
                     <img
@@ -180,7 +180,7 @@ export default function PlaceOrderPage() {
                       >
                         {item.name}
                       </Link>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
                         {item.qty} x ${item.price}
                       </div>
                     </div>
@@ -193,8 +193,8 @@ export default function PlaceOrderPage() {
             </div>
           </div>
           <div className="md:col-span-1">
-            <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-8">
-              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl p-6 sticky top-8">
+              <h2 className="text-2xl font-extrabold mb-4 text-primary-700 dark:text-primary-300 flex items-center gap-2">
                 <svg
                   className="w-6 h-6 text-primary-500"
                   fill="none"
@@ -219,28 +219,30 @@ export default function PlaceOrderPage() {
                 Order Summary
               </h2>
               <div className="space-y-3">
-                <div className="flex justify-between text-gray-700">
+                <div className="flex justify-between text-gray-700 dark:text-gray-200">
                   <span>Items</span>
                   <span>${cart.itemsPrice.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-700">
+                <div className="flex justify-between text-gray-700 dark:text-gray-200">
                   <span>Shipping</span>
                   <span>
                     {cart.shippingPrice === 0 ? (
-                      <span className="text-green-600 font-semibold">Free</span>
+                      <span className="text-green-600 dark:text-green-400 font-semibold">
+                        Free
+                      </span>
                     ) : (
                       `$${cart.shippingPrice.toFixed(2)}`
                     )}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-700">
+                <div className="flex justify-between text-gray-700 dark:text-gray-200">
                   <span>Tax</span>
                   <span>${cart.taxPrice.toFixed(2)}</span>
                 </div>
-                <hr className="my-2" />
+                <hr className="my-2 border-gray-200 dark:border-gray-700" />
                 <div className="flex justify-between text-xl font-bold">
                   <span>Total</span>
-                  <span className="text-primary-600">
+                  <span className="text-primary-600 dark:text-primary-300">
                     ${cart.totalPrice.toFixed(2)}
                   </span>
                 </div>
@@ -248,7 +250,7 @@ export default function PlaceOrderPage() {
               <button
                 onClick={placeOrderHandler}
                 disabled={cart.cartItems.length === 0 || loading}
-                className="mt-6 w-full bg-primary-600 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-primary-700 disabled:bg-gray-400 transition"
+                className="mt-6 w-full bg-primary-600 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 disabled:bg-gray-400 transition"
               >
                 {loading ? "Placing Order..." : "Place Order"}
               </button>

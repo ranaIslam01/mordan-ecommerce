@@ -28,13 +28,13 @@ export default function PaymentMethodPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-2 sm:px-0">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-8 px-2 sm:px-0">
       <div className="w-full max-w-2xl">
         <CheckoutSteps step1 step2 step3 />
-        <div className="bg-white rounded-2xl shadow-xl p-8 mt-4">
-          <h1 className="text-3xl font-extrabold mb-8 text-center text-primary-700 flex items-center justify-center gap-2">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-2xl p-8 mt-4">
+          <h1 className="text-3xl font-extrabold mb-8 text-center text-primary-700 dark:text-primary-300 flex items-center justify-center gap-2">
             <svg
-              className="w-7 h-7 text-primary-500"
+              className="w-7 h-7 text-primary-500 dark:text-primary-300"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -58,15 +58,15 @@ export default function PaymentMethodPage() {
           </h1>
           <form onSubmit={submitHandler} className="space-y-6">
             <div className="flex flex-col gap-4">
-              <label className="font-semibold text-gray-700">
+              <label className="font-semibold text-gray-700 dark:text-gray-200">
                 Select Payment Method
               </label>
               <div className="flex flex-col gap-3">
                 <label
                   className={`flex items-center p-3 rounded-lg border cursor-pointer transition ${
                     paymentMethodName === "PayPal"
-                      ? "border-primary-500 bg-primary-50"
-                      : "border-gray-300 bg-white"
+                      ? "border-primary-500 bg-primary-50 dark:bg-primary-900/30"
+                      : "border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900/60"
                   }`}
                   htmlFor="PayPal"
                 >
@@ -83,8 +83,8 @@ export default function PaymentMethodPage() {
                 <label
                   className={`flex items-center p-3 rounded-lg border cursor-pointer transition ${
                     paymentMethodName === "Stripe"
-                      ? "border-primary-500 bg-primary-50"
-                      : "border-gray-300 bg-white"
+                      ? "border-primary-500 bg-primary-50 dark:bg-primary-900/30"
+                      : "border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900/60"
                   }`}
                   htmlFor="Stripe"
                 >
@@ -101,8 +101,8 @@ export default function PaymentMethodPage() {
                 <label
                   className={`flex items-center p-3 rounded-lg border cursor-pointer transition ${
                     paymentMethodName === "CashOnDelivery"
-                      ? "border-primary-500 bg-primary-50"
-                      : "border-gray-300 bg-white"
+                      ? "border-primary-500 bg-primary-50 dark:bg-primary-900/30"
+                      : "border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900/60"
                   }`}
                   htmlFor="CashOnDelivery"
                 >
@@ -120,7 +120,7 @@ export default function PaymentMethodPage() {
             </div>
             <button
               type="submit"
-              className="w-full bg-primary-600 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-primary-700 transition"
+              className="w-full bg-primary-600 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-primary-700 transition dark:bg-primary-500 dark:hover:bg-primary-600"
             >
               Continue
             </button>

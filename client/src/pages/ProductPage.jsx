@@ -245,22 +245,22 @@ export default function ProductPage() {
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Product Gallery */}
           <div className="lg:col-span-7">
-            <div className="glass-effect rounded-3xl p-6 xl:p-8 backdrop-blur-xl border border-white/20">
+            <div className="glass-effect rounded-3xl p-6 xl:p-8 backdrop-blur-xl border border-white/20 dark:border-gray-800 bg-white/70 dark:bg-gray-900/70 shadow-lg dark:shadow-2xl">
               {/* Main Image */}
               <div className="relative group mb-6">
-                <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden bg-gray-100">
+                <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
                   <img
                     src={productImages[selectedImage] || productImages[0]}
                     alt={product.name}
-                    className="w-full h-96 xl:h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-96 xl:h-[500px] object-cover transition-transform duration-700 group-hover:scale-105 bg-gray-100 dark:bg-gray-800"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
 
                 {/* Fullscreen Button */}
                 <button
                   onClick={() => setShowFullscreen(true)}
-                  className="absolute top-4 right-4 w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-all duration-300"
+                  className="absolute top-4 right-4 w-12 h-12 bg-black/50 dark:bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 dark:hover:bg-primary-700 transition-all duration-300 border border-white/20 dark:border-gray-700"
                 >
                   <svg
                     className="w-5 h-5"
@@ -280,10 +280,10 @@ export default function ProductPage() {
                 {/* Wishlist Button */}
                 <button
                   onClick={toggleWishlist}
-                  className={`absolute top-4 left-4 w-12 h-12 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 ${
+                  className={`absolute top-4 left-4 w-12 h-12 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 border border-white/20 dark:border-gray-700 ${
                     isInWishlist(product._id)
                       ? "bg-red-500 text-white"
-                      : "bg-black/50 text-white hover:bg-red-500"
+                      : "bg-black/50 dark:bg-gray-800/80 text-white hover:bg-red-500 dark:hover:bg-red-700"
                   }`}
                 >
                   <svg
@@ -329,14 +329,14 @@ export default function ProductPage() {
 
           {/* Product Details */}
           <div className="lg:col-span-5">
-            <div className="glass-effect rounded-3xl p-6 xl:p-8 backdrop-blur-xl border border-white/20 sticky top-8">
+            <div className="glass-effect rounded-3xl p-6 xl:p-8 backdrop-blur-xl border border-white/20 dark:border-gray-800 bg-white/70 dark:bg-gray-900/70 shadow-lg dark:shadow-2xl sticky top-8">
               {/* Product Title & Brand */}
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
+                  <span className="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full text-sm font-medium">
                     {product.brand || "Premium Brand"}
                   </span>
-                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
                     {product.category || "Electronics"}
                   </span>
                 </div>
@@ -359,14 +359,14 @@ export default function ProductPage() {
                   <span className="text-4xl font-bold text-primary-600 dark:text-primary-400">
                     ${product.price}
                   </span>
-                  <span className="text-lg text-gray-500 line-through">
+                  <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
                     ${(product.price * 1.2).toFixed(2)}
                   </span>
-                  <span className="px-2 py-1 bg-red-100 text-red-700 rounded-lg text-sm font-medium">
+                  <span className="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg text-sm font-medium">
                     20% OFF
                   </span>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Inclusive of all taxes
                 </p>
               </div>
@@ -409,10 +409,10 @@ export default function ProductPage() {
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
                     Quantity
                   </h3>
-                  <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-2xl p-1 w-fit">
+                  <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-2xl p-1 w-fit border border-gray-200 dark:border-gray-700">
                     <button
                       onClick={() => setQty(Math.max(1, qty - 1))}
-                      className="w-12 h-12 rounded-xl bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-primary-50 hover:text-primary-600 transition-all duration-200 flex items-center justify-center"
+                      className="w-12 h-12 rounded-xl bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 flex items-center justify-center border border-gray-200 dark:border-gray-700"
                     >
                       <svg
                         className="w-4 h-4"
@@ -435,7 +435,7 @@ export default function ProductPage() {
                       onClick={() =>
                         setQty(Math.min(product.countInStock, qty + 1))
                       }
-                      className="w-12 h-12 rounded-xl bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-primary-50 hover:text-primary-600 transition-all duration-200 flex items-center justify-center"
+                      className="w-12 h-12 rounded-xl bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 flex items-center justify-center border border-gray-200 dark:border-gray-700"
                     >
                       <svg
                         className="w-4 h-4"
@@ -585,7 +585,7 @@ export default function ProductPage() {
 
         {/* Reviews Section */}
         <div className="mt-16">
-          <div className="glass-effect rounded-3xl p-6 xl:p-8 backdrop-blur-xl border border-white/20">
+          <div className="glass-effect rounded-3xl p-6 xl:p-8 backdrop-blur-xl border border-white/20 dark:border-gray-800 bg-white/70 dark:bg-gray-900/70 shadow-lg dark:shadow-2xl">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 font-serif">
               Customer Reviews
             </h2>
@@ -626,7 +626,7 @@ export default function ProductPage() {
             {/* Individual Reviews */}
             {product.reviews?.length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-200 dark:border-gray-700">
                   <svg
                     className="w-8 h-8 text-gray-400"
                     fill="none"
@@ -653,7 +653,7 @@ export default function ProductPage() {
                 {product.reviews?.map((review, index) => (
                   <div
                     key={review._id}
-                    className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 animate-slide-up"
+                    className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 animate-slide-up shadow dark:shadow-lg"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className="flex items-start justify-between mb-4">
@@ -697,7 +697,7 @@ export default function ProductPage() {
                         value={rating}
                         onChange={(e) => setRating(Number(e.target.value))}
                         required
-                        className="w-full p-4 border border-gray-200/50 rounded-2xl bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className="w-full p-4 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       >
                         <option value="">Select Rating</option>
                         <option value="1">1 - Poor</option>
@@ -719,7 +719,7 @@ export default function ProductPage() {
                       onChange={(e) => setComment(e.target.value)}
                       required
                       placeholder="Share your thoughts about this product..."
-                      className="w-full p-4 border border-gray-200/50 rounded-2xl bg-white/50 backdrop-blur-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-gray-400 resize-none"
+                      className="w-full p-4 border border-gray-200/50 dark:border-gray-700/50 rounded-2xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 resize-none"
                     ></textarea>
                   </div>
 
@@ -747,8 +747,8 @@ export default function ProductPage() {
                   )}
                 </form>
               ) : (
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-8 text-center">
-                  <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-gray-50 dark:bg-gray-900/60 rounded-2xl p-8 text-center border border-gray-200 dark:border-gray-700">
+                  <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-200 dark:border-gray-700">
                     <svg
                       className="w-8 h-8 text-gray-400"
                       fill="none"
@@ -781,10 +781,10 @@ export default function ProductPage() {
 
       {/* Fullscreen Image Modal */}
       {showFullscreen && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/90 dark:bg-gray-900/95 z-50 flex items-center justify-center p-4">
           <button
             onClick={() => setShowFullscreen(false)}
-            className="absolute top-4 right-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300"
+            className="absolute top-4 right-4 w-12 h-12 bg-white/20 dark:bg-gray-800/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 dark:hover:bg-primary-700 transition-all duration-300 border border-white/20 dark:border-gray-700"
           >
             <svg
               className="w-6 h-6"
