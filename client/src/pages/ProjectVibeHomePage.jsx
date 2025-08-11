@@ -36,6 +36,8 @@ const ProjectVibeHomePage = () => {
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const [viewMode, setViewMode] = useState('asymmetric'); // asymmetric, grid, list
   const scrollControllerRef = useRef(null);
+  const vibeFilterScrollRef = useRef(null);
+  const vibeFilterContainerRef = useRef(null);
   const limit = 12;
 
   const [{ loading, error, products, pages, total }, dispatch] = useReducer(reducer, {
@@ -133,6 +135,27 @@ const ProjectVibeHomePage = () => {
 
   const hasFilters = keyword || category || priceRange.min || priceRange.max || sortBy !== 'featured';
 
+  // Vibe Filter Scroll Detection
+  useEffect(() => {
+    const checkVibeFilterScroll = () => {
+      if (vibeFilterScrollRef.current && vibeFilterContainerRef.current) {
+        const scrollContainer = vibeFilterScrollRef.current;
+        const container = vibeFilterContainerRef.current;
+
+        if (scrollContainer.scrollWidth > scrollContainer.clientWidth) {
+          container.classList.add('has-scroll');
+        } else {
+          container.classList.remove('has-scroll');
+        }
+      }
+    };
+
+    checkVibeFilterScroll();
+    window.addEventListener('resize', checkVibeFilterScroll);
+
+    return () => window.removeEventListener('resize', checkVibeFilterScroll);
+  }, [products]);
+
   const categories = [
     { name: 'All', value: '', icon: '🛍️', color: 'from-gray-400 to-gray-600' },
     { name: 'Electronics', value: 'electronics', icon: '📱', color: 'from-blue-400 to-blue-600' },
@@ -221,122 +244,170 @@ const ProjectVibeHomePage = () => {
           </div>
         </div>
 
-        {/* Advanced Control Panel */}
+        {/* Responsive Horizontal Filter Panel */}
         <div className="mb-12 scroll-trigger">
-          <div className="asymmetric-grid items-center gap-6">
-            
-            {/* Filters Section */}
-            <div className="lg:col-span-8 space-y-6">
-              
-              {/* Primary Controls */}
-              <div className="flex flex-col lg:flex-row gap-6">
-                
-                {/* Sort Selection */}
-                <div className="glass-effect p-6 rounded-2xl shadow-modern">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                    </svg>
-                    Sort by
-                  </h3>
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-                    {sortOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => handleSortChange(option.value)}
-                        className={`p-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                          sortBy === option.value
-                            ? 'bg-gradient-primary text-white shadow-modern'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-50 hover:text-primary-700'
-                        }`}
-                      >
-                        <span className="mr-2">{option.icon}</span>
-                        {option.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+          <div ref={vibeFilterContainerRef} className="vibe-filter-container">
+            <div ref={vibeFilterScrollRef} className="vibe-filter-scroll overflow-x-auto">
+              <div className="vibe-filter-wrapper flex gap-4 pb-4">
 
-                {/* Price Range */}
-                <div className="glass-effect p-6 rounded-2xl shadow-modern">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
-                    Price Range
-                  </h3>
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      value={priceRange.min}
-                      onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-                      className="input-modern flex-1"
-                    />
-                    <div className="w-4 h-px bg-gray-300 dark:bg-gray-600" />
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      value={priceRange.max}
-                      onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-                      className="input-modern flex-1"
-                    />
-                    <Button variant="primary" size="sm" onClick={handlePriceFilter}>
-                      Apply
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* View Controls */}
-            <div className="lg:col-span-4 space-y-4">
-              
-              {/* Advanced Filters Button */}
-              <Button 
-                variant="outline" 
-                onClick={() => setShowAdvancedFilter(true)}
-                className="w-full interactive-element"
-                icon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                  </svg>
-                }
-              >
-                Advanced Filters
-              </Button>
-
-              {/* View Mode Toggle */}
-              <div className="flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
-                {[
-                  { mode: 'asymmetric', icon: '⬜', label: 'Asymmetric' },
-                  { mode: 'grid', icon: '⊞', label: 'Grid' },
-                  { mode: 'list', icon: '☰', label: 'List' }
-                ].map((view) => (
-                  <button
-                    key={view.mode}
-                    onClick={() => setViewMode(view.mode)}
-                    className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                      viewMode === view.mode
-                        ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                    title={view.label}
+                {/* Sort By Filters */}
+                {sortOptions.map((option) => (
+                  <div
+                    key={option.value}
+                    className="vibe-filter-card glass-effect rounded-2xl p-4 shadow-modern flex-shrink-0 cursor-pointer transition-all duration-300 hover:shadow-modern-lg hover:-translate-y-1"
+                    onClick={() => handleSortChange(option.value)}
                   >
-                    <span className="text-lg">{view.icon}</span>
-                  </button>
-                ))}
-              </div>
+                    <div className="flex items-center gap-3">
+                      <div className={`vibe-icon-wrapper w-10 h-10 rounded-xl flex items-center justify-center ${
+                        sortBy === option.value
+                          ? 'bg-gradient-primary text-white'
+                          : 'bg-primary-100 text-primary-600'
+                      }`}>
+                        <span className="text-lg">{option.icon}</span>
+                      </div>
+                      <div>
+                        <div className="vibe-filter-label text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                          Sort by
+                        </div>
+                        <div className={`vibe-filter-value text-sm font-semibold transition-colors ${
+                          sortBy === option.value
+                            ? 'text-primary-600 dark:text-primary-400'
+                            : 'text-gray-700 dark:text-gray-300'
+                        }`}>
+                          {option.name}
+                        </div>
+                      </div>
+                    </div>
 
-              {/* Clear Filters */}
-              {hasFilters && (
-                <Button variant="ghost" onClick={clearFilters} className="w-full" size="sm">
-                  Clear All Filters
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </Button>
-              )}
+                    {/* Active Indicator */}
+                    {sortBy === option.value && (
+                      <div className="vibe-active-indicator mt-2 w-full h-1 bg-gradient-primary rounded-full opacity-80" />
+                    )}
+                  </div>
+                ))}
+
+                {/* Price Range Filter */}
+                <div className="vibe-filter-card glass-effect rounded-2xl p-4 shadow-modern flex-shrink-0 min-w-[280px]">
+                  <div className="flex items-start gap-3">
+                    <div className="vibe-icon-wrapper w-10 h-10 rounded-xl bg-secondary-100 text-secondary-600 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <div className="vibe-filter-label text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                        Price Range
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          placeholder="Min"
+                          value={priceRange.min}
+                          onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                          className="vibe-price-input w-16 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        />
+                        <div className="w-2 h-px bg-gray-300 dark:bg-gray-600" />
+                        <input
+                          type="number"
+                          placeholder="Max"
+                          value={priceRange.max}
+                          onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                          className="vibe-price-input w-16 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        />
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={handlePriceFilter}
+                          className="px-3 py-1 text-xs"
+                        >
+                          Apply
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* View Mode Selector */}
+                <div className="vibe-filter-card glass-effect rounded-2xl p-4 shadow-modern flex-shrink-0">
+                  <div className="flex items-center gap-3">
+                    <div className="vibe-icon-wrapper w-10 h-10 rounded-xl bg-accent-100 text-accent-600 flex items-center justify-center">
+                      <span className="text-lg">👁️</span>
+                    </div>
+                    <div>
+                      <div className="vibe-filter-label text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                        View Mode
+                      </div>
+                      <div className="flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1">
+                        {[
+                          { mode: 'asymmetric', icon: '⬜', label: 'Asymmetric' },
+                          { mode: 'grid', icon: '⊞', label: 'Grid' },
+                          { mode: 'list', icon: '☰', label: 'List' }
+                        ].map((view) => (
+                          <button
+                            key={view.mode}
+                            onClick={() => setViewMode(view.mode)}
+                            className={`px-2 py-1 rounded text-xs font-medium transition-all duration-300 ${
+                              viewMode === view.mode
+                                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                            }`}
+                            title={view.label}
+                          >
+                            {view.icon}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Advanced Filters */}
+                <div
+                  className="vibe-filter-card glass-effect rounded-2xl p-4 shadow-modern flex-shrink-0 cursor-pointer transition-all duration-300 hover:shadow-modern-lg hover:-translate-y-1"
+                  onClick={() => setShowAdvancedFilter(true)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="vibe-icon-wrapper w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="vibe-filter-label text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                        More Options
+                      </div>
+                      <div className="vibe-filter-value text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        Advanced Filters
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Clear All Filters */}
+                {hasFilters && (
+                  <div
+                    className="vibe-filter-card bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-4 shadow-modern flex-shrink-0 cursor-pointer transition-all duration-300 hover:shadow-modern-lg hover:-translate-y-1"
+                    onClick={clearFilters}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="vibe-icon-wrapper w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="vibe-filter-label text-xs font-medium text-red-500 uppercase tracking-wide">
+                          Reset
+                        </div>
+                        <div className="vibe-filter-value text-sm font-semibold text-red-600">
+                          Clear All
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+              </div>
             </div>
           </div>
         </div>

@@ -38,17 +38,27 @@ const Header = () => {
   const cartItemCount = cart.cartItems.reduce((a, c) => a + c.qty, 0);
 
   const navigation = [
-    { name: 'Home', href: '/', current: true },
-    { name: 'Categories', href: '/categories', current: false },
-    { name: 'Deals', href: '/deals', current: false },
-    { name: 'About', href: '/about', current: false },
+    { name: 'Home', href: '/', icon: '🏠', current: true },
+    { name: 'Categories', href: '/categories', icon: '📂', current: false },
+    { name: 'Deals', href: '/deals', icon: '🔥', current: false, badge: 'Hot' },
+    { name: 'New Arrivals', href: '/new', icon: '✨', current: false, badge: 'New' },
+    { name: 'Support', href: '/support', icon: '💬', current: false },
+  ];
+
+  const quickCategories = [
+    { name: 'Electronics', href: '/category/electronics', icon: '📱' },
+    { name: 'Fashion', href: '/category/fashion', icon: '👕' },
+    { name: 'Home & Garden', href: '/category/home', icon: '🏠' },
+    { name: 'Sports', href: '/category/sports', icon: '⚽' },
+    { name: 'Books', href: '/category/books', icon: '📚' },
+    { name: 'Beauty', href: '/category/beauty', icon: '💄' },
   ];
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'bg-white/85 dark:bg-gray-900/85 backdrop-blur-xl shadow-modern-xl border-b border-gray-200/50 dark:border-gray-700/50' 
+        isScrolled
+          ? 'bg-white/85 dark:bg-gray-900/85 backdrop-blur-xl shadow-modern-xl border-b border-gray-200/50 dark:border-gray-700/50'
           : 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-modern'
       }`}
     >
@@ -89,6 +99,16 @@ const Header = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
+            {/* Notifications */}
+            <div className="relative p-2.5 lg:p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-yellow-50 dark:hover:from-orange-900/20 dark:hover:to-yellow-900/20 transition-all duration-300 group border border-transparent hover:border-orange-200 dark:hover:border-orange-700/50 cursor-pointer">
+              <svg className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600 dark:text-gray-200 group-hover:text-orange-600 dark:group-hover:text-orange-300 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-5-5v-5a5.99 5.99 0 00-6-6 5.99 5.99 0 00-6 6v5l-5 5h5m0 0v1a3 3 0 006 0v-1m-3-10h.01" />
+              </svg>
+              <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full h-4 w-4 lg:h-5 lg:w-5 flex items-center justify-center animate-pulse shadow-lg text-[10px]">
+                3
+              </span>
+            </div>
+
             {/* Dark Mode Toggle */}
             <div className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300">
               <DarkModeToggle size="sm" />
@@ -229,9 +249,12 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Dark Mode Toggle */}
+            <DarkModeToggle />
+
             {/* Mobile Cart */}
-            <Link 
-              to="/cart" 
+            <Link
+              to="/cart"
               className="relative p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -260,8 +283,8 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <div 
+      {/* Enhanced Mobile Menu */}
+      <div
         className={`md:hidden transition-all duration-500 overflow-hidden ${
           isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
         }`}
@@ -272,18 +295,78 @@ const Header = () => {
             <SearchBox onSearch={handleMobileSearch} />
           </div>
 
+          {/* Quick Categories Section */}
+          <div className="px-4 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Quick Categories</h3>
+            <div className="grid grid-cols-3 gap-3">
+              {quickCategories.map((category) => (
+                <Link
+                  key={category.name}
+                  to={category.href}
+                  className="flex flex-col items-center p-3 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 transition-all duration-300 hover:scale-105"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="text-2xl mb-1">{category.icon}</span>
+                  <span className="text-xs font-medium text-gray-700 dark:text-gray-200 text-center">{category.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* Mobile Navigation */}
           <div className="px-4 py-3 space-y-1">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Main Menu</h3>
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className="block px-4 py-3 rounded-xl text-gray-700 dark:text-gray-100 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-200 font-semibold transition-all duration-300"
+                className="flex items-center justify-between px-4 py-3 rounded-xl text-gray-700 dark:text-gray-100 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/30 dark:hover:to-secondary-900/30 hover:text-primary-600 dark:hover:text-primary-200 font-semibold transition-all duration-300"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {item.name}
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">{item.icon}</span>
+                  <span>{item.name}</span>
+                </div>
+                {item.badge && (
+                  <span className={`px-2 py-1 text-xs font-bold rounded-full ${
+                    item.badge === 'Hot'
+                      ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
+                      : 'bg-gradient-to-r from-green-500 to-teal-500 text-white'
+                  }`}>
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             ))}
+          </div>
+
+          {/* Mobile Quick Actions */}
+          <div className="px-4 py-4 border-t border-gray-200/50 dark:border-gray-700/50">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Quick Actions</h3>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <Link
+                to="/wishlist"
+                className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 hover:from-pink-100 hover:to-rose-100 dark:hover:from-pink-900/30 dark:hover:to-rose-900/30 transition-all duration-300"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <svg className="w-5 h-5 text-pink-600 dark:text-pink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">Wishlist</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{wishlistCount} items</span>
+                </div>
+              </Link>
+              <button className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 hover:from-orange-100 hover:to-yellow-100 dark:hover:from-orange-900/30 dark:hover:to-yellow-900/30 transition-all duration-300">
+                <svg className="w-5 h-5 text-orange-600 dark:text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-5-5v-5a5.99 5.99 0 00-6-6 5.99 5.99 0 00-6 6v5l-5 5h5m0 0v1a3 3 0 006 0v-1m-3-10h.01" />
+                </svg>
+                <div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">Notifications</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">3 new</span>
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* Mobile User Section */}

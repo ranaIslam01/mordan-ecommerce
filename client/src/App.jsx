@@ -5,6 +5,7 @@ import { DarkModeProvider } from './context/DarkModeContext.jsx';
 import PerformanceOptimizer from './utils/PerformanceOptimizer';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
+import Breadcrumb from './components/Breadcrumb.jsx';
 import ProjectVibeHomePage from './pages/ProjectVibeHomePage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
@@ -43,7 +44,8 @@ function App() {
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
             <Header />
-            <main className="flex-grow pt-20">
+            <Breadcrumb />
+            <main className="flex-grow pt-16 lg:pt-20 xl:pt-24">
               <Routes>
                 <Route path="/" element={<ProjectVibeHomePage />} />
                 <Route path="/classic" element={<HomePage />} />

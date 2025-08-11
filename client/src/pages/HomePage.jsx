@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, useRef } from 'react';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import HeroSection from '../components/HeroSection';
@@ -33,6 +33,8 @@ const HomePage = () => {
     max: searchParams.get('maxPrice') || ''
   });
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+  const filterScrollRef = useRef(null);
+  const filterContainerRef = useRef(null);
   const limit = 12;
 
   const [{ loading, error, products, pages, total }, dispatch] = useReducer(reducer, {
@@ -135,6 +137,27 @@ const HomePage = () => {
 
   const hasFilters = keyword || category || priceRange.min || priceRange.max || sortBy !== 'featured';
 
+  // Check if filter container has horizontal scroll
+  useEffect(() => {
+    const checkScroll = () => {
+      if (filterScrollRef.current && filterContainerRef.current) {
+        const container = filterScrollRef.current;
+        const wrapper = filterContainerRef.current;
+
+        if (container.scrollWidth > container.clientWidth) {
+          wrapper.classList.add('has-scroll');
+        } else {
+          wrapper.classList.remove('has-scroll');
+        }
+      }
+    };
+
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [products]);
+
   const ProductSkeleton = () => (
     <div className="animate-pulse">
       <div className="bg-gray-300 aspect-square rounded-2xl mb-4"></div>
@@ -187,77 +210,204 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Filters and Sort */}
-        <div className="flex flex-col gap-4 mb-8 animate-slide-up">
-          {/* Price Filter */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white rounded-2xl shadow-modern">
-            <span className="text-body-md font-semibold text-gray-700 whitespace-nowrap">
-              Price Range:
-            </span>
-            <div className="flex items-center gap-2 flex-wrap">
-              <input
-                type="number"
-                placeholder="Min"
-                value={priceRange.min}
-                onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-                className="w-20 sm:w-24 px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-              <span className="text-gray-500">-</span>
-              <input
-                type="number"
-                placeholder="Max"
-                value={priceRange.max}
-                onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-                className="w-20 sm:w-24 px-2 sm:px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-              <Button variant="primary" size="sm" onClick={handlePriceFilter}>
-                Apply
-              </Button>
-            </div>
-          </div>
+        {/* Filters and Sort - Horizontal Scroll Layout */}
+        <div className="mb-8 animate-slide-up">
+          <div ref={filterContainerRef} className="filter-container overflow-x-auto">
+            <div ref={filterScrollRef} className="filter-scroll-wrapper flex gap-4 pb-4">
 
-          {/* Sort Options */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 bg-white rounded-2xl shadow-modern">
-            <span className="text-body-md font-semibold text-gray-700 whitespace-nowrap">
-              Sort by:
-            </span>
-            <div className="flex flex-col sm:flex-row gap-3 flex-1">
-              <select
-                value={sortBy}
-                onChange={(e) => handleSortChange(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
-              >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.name}
-                  </option>
-                ))}
-              </select>
-
-              {/* Action Buttons */}
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowAdvancedFilter(true)}
-                  className="whitespace-nowrap flex-shrink-0"
-                >
-                  <svg className="w-4 h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                  </svg>
-                  <span className="hidden sm:inline">Advanced Filters</span>
-                </Button>
-
-                {/* Clear Filters */}
-                {hasFilters && (
-                  <Button variant="ghost" size="sm" onClick={clearFilters} className="flex-shrink-0">
-                    <span className="hidden sm:inline">Clear All</span>
-                    <svg className="w-4 h-4 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              {/* Sort By Filter */}
+              <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="icon-wrapper">
+                    <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                     </svg>
-                  </Button>
-                )}
+                  </div>
+                  <div>
+                    <label className="filter-label text-body-sm font-semibold text-gray-700">Sort by</label>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => handleSortChange(e.target.value)}
+                      className="filter-select mt-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+                    >
+                      {sortOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
+
+              {/* Price Range Filter */}
+              <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="icon-wrapper">
+                    <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                    </svg>
+                  </div>
+                  <div>
+                    <label className="filter-label text-body-sm font-semibold text-gray-700">Price Range</label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        value={priceRange.min}
+                        onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                        className="price-input w-16 px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                      <span className="text-gray-400 text-xs">-</span>
+                      <input
+                        type="number"
+                        placeholder="Max"
+                        value={priceRange.max}
+                        onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                        className="price-input w-16 px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                      <Button variant="primary" size="sm" onClick={handlePriceFilter} className="ml-1">
+                        Apply
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Featured Filter */}
+              <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="icon-wrapper">
+                    <span className="text-lg">⭐</span>
+                  </div>
+                  <div>
+                    <label className="filter-label text-body-sm font-semibold text-gray-700">Featured</label>
+                    <button
+                      onClick={() => handleSortChange('featured')}
+                      className={`filter-btn mt-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                        sortBy === 'featured'
+                          ? 'bg-primary-600 text-white shadow-md'
+                          : 'bg-gray-100 text-gray-700 hover:bg-primary-100'
+                      }`}
+                    >
+                      Featured
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Best Rating Filter */}
+              <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="icon-wrapper">
+                    <span className="text-lg">🏆</span>
+                  </div>
+                  <div>
+                    <label className="filter-label text-body-sm font-semibold text-gray-700">Best Rating</label>
+                    <button
+                      onClick={() => handleSortChange('rating')}
+                      className={`filter-btn mt-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                        sortBy === 'rating'
+                          ? 'bg-primary-600 text-white shadow-md'
+                          : 'bg-gray-100 text-gray-700 hover:bg-primary-100'
+                      }`}
+                    >
+                      Best Rating
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Most Popular Filter */}
+              <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="icon-wrapper">
+                    <span className="text-lg">🔥</span>
+                  </div>
+                  <div>
+                    <label className="filter-label text-body-sm font-semibold text-gray-700">Most Popular</label>
+                    <button
+                      onClick={() => handleSortChange('popular')}
+                      className={`filter-btn mt-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                        sortBy === 'popular'
+                          ? 'bg-primary-600 text-white shadow-md'
+                          : 'bg-gray-100 text-gray-700 hover:bg-primary-100'
+                      }`}
+                    >
+                      Most Popular
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Newest First Filter */}
+              <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="icon-wrapper">
+                    <span className="text-lg">📅</span>
+                  </div>
+                  <div>
+                    <label className="filter-label text-body-sm font-semibold text-gray-700">Newest First</label>
+                    <button
+                      onClick={() => handleSortChange('newest')}
+                      className={`filter-btn mt-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                        sortBy === 'newest'
+                          ? 'bg-primary-600 text-white shadow-md'
+                          : 'bg-gray-100 text-gray-700 hover:bg-primary-100'
+                      }`}
+                    >
+                      Newest First
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Advanced Filters */}
+              <div className="filter-card bg-white rounded-2xl p-4 shadow-modern flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="icon-wrapper">
+                    <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <label className="filter-label text-body-sm font-semibold text-gray-700">Advanced Filters</label>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowAdvancedFilter(true)}
+                      className="mt-1"
+                    >
+                      Advanced Filters
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Clear Filters - Only show if filters active */}
+              {hasFilters && (
+                <div className="filter-card bg-red-50 border border-red-200 rounded-2xl p-4 shadow-modern flex-shrink-0">
+                  <div className="flex items-center gap-3">
+                    <div className="icon-wrapper">
+                      <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                    <div>
+                      <label className="filter-label text-body-sm font-semibold text-red-700">Clear All</label>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearFilters}
+                        className="mt-1 text-red-600 hover:bg-red-100"
+                      >
+                        Clear All
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
         </div>
