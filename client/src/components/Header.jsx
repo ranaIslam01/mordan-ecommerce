@@ -2,9 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Store } from '../context/Store';
 import { useWishlist } from '../context/WishlistContext';
-import SearchBox from './SearchBox';
-import Button from './Button';
-import DarkModeToggle from './DarkModeToggle';
+import SearchBox from './SearchBox.jsx';
+import Button from './Button.jsx';
+import DarkModeToggle from './DarkModeToggle.jsx';
 
 const Header = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
