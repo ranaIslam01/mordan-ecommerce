@@ -38,10 +38,20 @@ const Header = () => {
   const cartItemCount = cart.cartItems.reduce((a, c) => a + c.qty, 0);
 
   const navigation = [
-    { name: 'Home', href: '/', current: true },
-    { name: 'Categories', href: '/categories', current: false },
-    { name: 'Deals', href: '/deals', current: false },
-    { name: 'About', href: '/about', current: false },
+    { name: 'Home', href: '/', icon: '🏠', current: true },
+    { name: 'Categories', href: '/categories', icon: '📂', current: false },
+    { name: 'Deals', href: '/deals', icon: '🔥', current: false, badge: 'Hot' },
+    { name: 'New Arrivals', href: '/new', icon: '✨', current: false, badge: 'New' },
+    { name: 'Support', href: '/support', icon: '💬', current: false },
+  ];
+
+  const quickCategories = [
+    { name: 'Electronics', href: '/category/electronics', icon: '📱' },
+    { name: 'Fashion', href: '/category/fashion', icon: '👕' },
+    { name: 'Home & Garden', href: '/category/home', icon: '🏠' },
+    { name: 'Sports', href: '/category/sports', icon: '⚽' },
+    { name: 'Books', href: '/category/books', icon: '📚' },
+    { name: 'Beauty', href: '/category/beauty', icon: '💄' },
   ];
 
   return (
