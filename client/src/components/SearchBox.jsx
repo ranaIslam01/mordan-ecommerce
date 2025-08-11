@@ -97,8 +97,8 @@ const SearchBox = ({ onSearch, className = '' }) => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={handleInputFocus}
-            placeholder="Search for products..."
-            className="w-full pl-12 pr-16 py-3 rounded-2xl border-0 bg-white shadow-modern text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:shadow-modern-lg transition-all duration-300"
+            placeholder="Search for products, categories, brands..."
+            className="w-full pl-14 pr-20 py-4 lg:py-5 text-base lg:text-lg rounded-2xl border-0 bg-white shadow-modern text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:shadow-modern-lg transition-all duration-300 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
           />
           
           {/* Search Icon */}
