@@ -34,7 +34,7 @@ export default function OrderPage() {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL || 'https://ecommerce-server-1-6mhy.onrender.com'}/api/orders/${orderId}`,
+          `${process.env.REACT_APP_API_URL || 'https://mordan-ecommerce.onrender.com'}/api/orders/${orderId}`,
           { withCredentials: true }
         );
         dispatch({ type: 'FETCH_SUCCESS', payload: data });

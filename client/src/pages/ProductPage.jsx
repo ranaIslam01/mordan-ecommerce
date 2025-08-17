@@ -80,7 +80,7 @@ export default function ProductPage() {
       dispatchProduct({ type: "FETCH_REQUEST" });
       try {
         const baseUrl = (
-          process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+          process.env.REACT_APP_API_URL || "https://mordan-ecommerce.onrender.com"
         ).replace(/\/?$/, "");
         const { data } = await axios.get(
           `${baseUrl}/api/products/${productId}`

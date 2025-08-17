@@ -42,7 +42,7 @@ export default function PlaceOrderPage() {
     try {
       dispatch({ type: "CREATE_REQUEST" });
       const baseUrl = (
-        process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+        process.env.REACT_APP_API_URL || "https://mordan-ecommerce.onrender.com"
       ).replace(/\/?$/, "");
       const { data } = await axios.post(
         `${baseUrl}/api/orders`,

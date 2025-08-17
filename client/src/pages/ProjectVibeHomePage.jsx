@@ -79,7 +79,7 @@ const ProjectVibeHomePage = () => {
 
         const { data } = await axios.get(
           `${(
-            process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+            process.env.REACT_APP_API_URL || "https://mordan-ecommerce.onrender.com"
           ).replace(/\/?$/, "")}/api/products?${queryParams}`
         );
         dispatch({ type: "FETCH_SUCCESS", payload: data });

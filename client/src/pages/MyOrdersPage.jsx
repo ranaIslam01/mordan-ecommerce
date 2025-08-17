@@ -30,7 +30,7 @@ export default function MyOrdersPage() {
         const { data } = await axios.get(
           `${
             process.env.REACT_APP_API_URL ||
-            "https://ecommerce-server-1-6mhy.onrender.com"
+            "https://mordan-ecommerce.onrender.com"
           }/api/orders/myorders`,
           { withCredentials: true }
         );

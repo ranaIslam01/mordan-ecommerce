@@ -140,7 +140,7 @@ export default function ProfilePage() {
 
     try {
       const baseUrl = (
-        process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+        process.env.REACT_APP_API_URL || "https://mordan-ecommerce.onrender.com"
       ).replace(/\/?$/, "");
       await axios.put(
         `${baseUrl}/api/users/password`,
