@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
 const protect = async (req, res, next) => {
-  let token = null;
+  let token;
 
-  // 1. Try to get token from Authorization header
+  // 1. Authorization header থেকে
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer ")
@@ -12,26 +12,29 @@ const protect = async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
 
-  // 2. Fallback: Try to get token from cookie
+  // 2. Cookie থেকে fallback
   if (!token && req.cookies && req.cookies.jwt) {
     token = req.cookies.jwt;
   }
 
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.userId).select("-password");
-      if (!req.user) {
-        return res
-          .status(401)
-          .json({ message: "Not authorized, user not found" });
-      }
-      next();
-    } catch (error) {
-      res.status(401).json({ message: "Not authorized, token failed" });
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized, no token");
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.userId).select("-password");
+
+    if (!req.user) {
+      res.status(401);
+      throw new Error("Not authorized, user not found");
     }
-  } else {
-    res.status(401).json({ message: "Not authorized, no token" });
+
+    next();
+  } catch (error) {
+    res.status(401);
+    throw new Error("Not authorized, token failed");
   }
 };
 
