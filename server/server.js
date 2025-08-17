@@ -21,7 +21,7 @@ const app = express();
 // CORS middleware
 app.use(
   cors({
-    origin: ["https://mordan-ecommerce.vercel.app/", "http://localhost:3000"],
+    origin: ["https://mordan-ecommerce.vercel.app", "http://localhost:3000"],
     credentials: true,
   })
 );
