@@ -22,7 +22,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback ) {
+    origin: function (origin, callback) {
       // origin ছাড়া রিকোয়েস্ট (যেমন Postman) অথবা অনুমোদিত ডোমেইন থেকে আসা রিকোয়েস্ট গ্রহণ করুন
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
@@ -30,6 +30,8 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type, Authorization",
     credentials: true, // ফ্রন্টএন্ড থেকে কুকি পাঠানোর অনুমতি দেওয়ার জন্য এটি জরুরি
   })
 );
@@ -62,5 +64,7 @@ app.use((err, req, res, next) => {
 // সার্ভার চালু করুন
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log(
+    `✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`
+  );
 });
