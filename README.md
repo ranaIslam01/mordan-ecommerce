@@ -1,4 +1,4 @@
-# 🛍️ Modern E-Commerce Platform - RANA Shop
+# 🛍️ Modern E-Commerce Platform
 
 A comprehensive, full-stack e-commerce platform built with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js) featuring modern UI/UX design, advanced functionality, and performance optimization. This platform provides a complete online shopping experience with sophisticated animations, dark mode support, and comprehensive e-commerce features.
 
