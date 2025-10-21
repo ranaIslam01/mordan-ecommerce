@@ -124,7 +124,7 @@ export default function ProductPage() {
     try {
       await axios.post(
         `${(
-          process.env.REACT_APP_API_URL || "https://server-rjt8.onrender.com"
+          process.env.REACT_APP_API_URL || "https://mordan-ecommerce.onrender.com"
         ).replace(/\/?$/, "")}/api/products/${productId}/reviews`,
         { rating, comment },
         { withCredentials: true }

@@ -154,7 +154,7 @@ const HomePage = () => {
 
     checkScroll();
     window.addEventListener('resize', checkScroll);
-
+ 
     return () => window.removeEventListener('resize', checkScroll);
   }, [products]);
 
@@ -434,6 +434,8 @@ const HomePage = () => {
           </div>
         ) : products && products.length > 0 ? (
           <>
+
+          
             {/* Results Summary */}
             <div className="flex justify-between items-center mb-8 animate-slide-up">
               <p className="text-body-md text-gray-600">
